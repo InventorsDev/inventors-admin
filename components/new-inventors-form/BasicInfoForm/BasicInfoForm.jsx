@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Country, State, City }  from 'country-state-city';
+import { countries } from '../data';
 
 const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
     return (
@@ -20,49 +20,48 @@ const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
                 <div className="name">
                     <div id="first-name-div">
                         <label htmlFor="first-name">First Name</label>
-                        <input type="name" id="first-name" name="first-name" required />
+                        <input type="name" id="first-name" name="first-name" className='input' required />
                     </div>
 
                     <div id="last-name-div">
                         <label htmlFor="first-name">Last Name</label>
-                        <input type="name" id="last-name" name="last-name" required />
+                        <input type="name" id="last-name" name="last-name" className='input' required />
                     </div>
                 </div>
                 
                 <div className="email-password">
                     <div id="email-div">
                         <label htmlFor="email">Email address</label>
-                        <input type="email" id="email" name="email" required />
+                        <input type="email" id="email" name="email" className='input' required />
                     </div>
 
                     <div id="password-div">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" required />
+                        <input type="password" id="password" name="password" className='input' required />
                     </div>
                 </div>
 
                 <div className="description-country-city">
                     <div id="bio-description">
                         <label htmlFor="description">Bio/Short Description</label>
-                        <input type="text" name="bio-description" id="bio-description" />
+                        <textarea name="bio-description" id="bio-description" placeholder='Write here..' className='input'></textarea>
                     </div>
 
                     <div id="Phone">
                         <label htmlFor="phone">Phone</label>
-                        <input type="tel" name="phone" id="phone" />
+                        <input type="tel" name="phone" id="phone" className='input' />
                     </div>
 
                     <div id="country">
                         <label htmlFor="country"></label>
-                        <select name="country" id="country">
+                        <select name="country" id="country" className='input'>
                             <option value="">-- Select a country --</option>
-                            {Country.getAllCountries().map((country) => (
+                            {countries.map((country) => (
                                 <option key={country.name} value={country.name}>{country.name}</option>
                             ))}
                         </select>
                     </div>
                 </div>
-
             </form>
         </div>
     );

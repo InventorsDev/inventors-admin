@@ -82,6 +82,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                     <div id="interest">
                         <label htmlFor="interest">Area of Interest (e.g Web Development, AI, Cybersecurity)</label>
                         <input type="text" id="interest" name="interest" placeholder="e.g. graphic design, entrepreneurship, etc." />
+                        <textarea name="interest" id="interest" placeholder='Write here .. ' className='input'></textarea>
                     </div>
                 </div>
             </form>
