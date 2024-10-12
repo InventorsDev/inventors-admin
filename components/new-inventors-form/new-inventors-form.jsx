@@ -12,7 +12,7 @@ const NewInventorsForm = () => {
         professionalInfo: {},
         contactInfo: {},
     });
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(2);
     const [isBasicInfoFilled, updateIsBasicInfoFilled] = useState(false);
     const [isPersonalInfoFilled, updateIsPersonalInfoFilled] = useState(false);
     const [isContactInfoFilled, updateIsContactInfoFilled] = useState(false);
