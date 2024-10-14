@@ -4,10 +4,10 @@
 
 :root {
   --background: #ffffff;
-  --primary-green: #00B598;
-  --mint-green: #E7F8F5;
-  --dark-gray: #6B6B6B;
-  --light-gray: #98A4AE;
+  --primary-green: #00b598;
+  --mint-green: #e7f8f5;
+  --dark-gray: #6b6b6b;
+  --light-gray: #98a4ae;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -16,12 +16,6 @@
     --foreground: #ededed;
   }
 } */
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 @layer utilities {
   .text-balance {
