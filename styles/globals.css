@@ -4,15 +4,18 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --primary-green: #00B598;
+  --mint-green: #E7F8F5;
+  --dark-gray: #6B6B6B;
+  --light-gray: #98A4AE;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
