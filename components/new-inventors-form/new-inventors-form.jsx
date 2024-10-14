@@ -17,6 +17,31 @@ const NewInventorsForm = () => {
     const [isPersonalInfoFilled, updateIsPersonalInfoFilled] = useState(false);
     const [isContactInfoFilled, updateIsContactInfoFilled] = useState(false);
 
+    const goToLastStep = () => {
+        let lastStep;
+
+
+        if (step == 1) {
+            lastStep = 1; 
+        } else {
+            lastStep = step - 1;
+        }
+
+        setStep(lastStep);
+    }
+
+    const goToNextStep = () => {    
+        let nextStep;
+
+        if (step == 3) {
+            nextStep = 1; 
+        } else {
+            nextStep = step + 1;
+        }
+
+        setStep(nextStep);
+    }
+
     return (
         <div id='new-inventors-form' className='w-full h-full bg-[#E7F8F5] p-4 rounded-xl font-PT-sans'>
             <div className='white-background-section w-full h-full bg-white rounded-xl py-6 pb-2 px-14'>
@@ -55,15 +80,22 @@ const NewInventorsForm = () => {
 
                         <div id="nav" className='flex gap-3'>
                             <div id="previous" className='button border border-[#DEDEDE] flex transition-all duration-300 ease-out hover:scale-[104%] 
-                            justify-between gap-4 text-[#4A4A4A] w-fit rounded-lg'>
+                            justify-between gap-4 text-[#4A4A4A] w-fit rounded-lg' onClick={goToLastStep}>
                                 <Image src={"/new-inventors-form/left-arrow.svg"} alt='left arrow' width={20} height={20} />
                                 <span>Previous</span>
                             </div>
-                            <div id="next" className='button bg-[#00977F] flex justify-between ease-transition scale-[102%] gap-[2.9rem] text-white 
-                            transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit'>
+
+                            {step != 3 ? (<div id="next" className='button bg-[#00977F] flex justify-between ease-transition scale-[102%] gap-[2.9rem] text-white 
+                            transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit' onClick = {goToNextStep}>
                                 <span>Next</span>
                                 <Image src={"/new-inventors-form/right-arrow.svg"} alt='right arrow' width={20} height={20} />
-                            </div>
+                            </div>): (
+                                <div id="next" className='button bg-[#00977F] flex justify-between ease-transition scale-[102%] gap-[2.9rem] text-white 
+                                transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit'>
+                                    <span>Submit</span>
+                                    <Image src={"/new-inventors-form/right-arrow.svg"} alt='right arrow' width={20} height={20} />
+                                </div>
+                            )}
                         </div>
                     </header>
 
