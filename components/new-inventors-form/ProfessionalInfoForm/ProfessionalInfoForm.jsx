@@ -36,7 +36,8 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                     <div id="years-of-experience">
                         <label htmlFor="experience">Years of Experience</label>
                         <select name="experience" id="experience" className='input'>
-                            {yearsOfExperience.map(item => <option value={item} />)}
+                            <option value="">Select</option>
+                            {yearsOfExperience.map(item => <option value={item}>{item}</option>)}
                         </select>
                     </div>
 
