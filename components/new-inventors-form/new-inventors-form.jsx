@@ -18,29 +18,29 @@ const NewInventorsForm = () => {
     const [isContactInfoFilled, updateIsContactInfoFilled] = useState(false);
 
     return (
-        <div id='new-inventors-form' className='w-full h-full bg-[#E7F8F5] p-4 rounded-xl'>
+        <div id='new-inventors-form' className='w-full h-full bg-[#E7F8F5] p-4 rounded-xl font-PT-sans'>
             <div className='white-background-section w-full h-full bg-white rounded-xl py-6 pb-2 px-14'>
                 <div id='form-steps' className='text-[14px] bg-[#F3FBFA] mx-12 flex px-4 py-2 rounded-xl'>  
                     <div id="basic-info" className='flex flex-col gap-2 font-[400] justify-center items-center text-nowrap'>
-                        <div className="icon">
+                        <div className="icon" onClick={() => setStep(1)}>
                             <Image src="/new-inventors-form/user-03.svg" alt="Basic Information Icon" width={20} height={20} />
                         </div>
                         <h3>Basic Information</h3>
                     </div>
 
-                    <div className={`line`}></div>
+                    <div className={`line ${step != 1? "active-line":""}`}></div>
 
                     <div id="personal-info" className='flex flex-col gap-2 font-[400] justify-center items-center text-nowrap'>
-                        <div className="icon">
+                        <div className="icon"  onClick={() => setStep(2)}>
                             <Image src="/new-inventors-form/briefcase.svg" alt="Professional Info Icon" width={20} height={20} />
                         </div>
                         <h3>Professional Information</h3>
                     </div>
 
-                    <div className={`line`}></div>
+                    <div className={`line ${step != 2 && step != 1? "active-line":""}`}></div>
 
                     <div id="contact-info" className='flex flex-col gap-2 font-[400] justify-center items-center text-nowrap'>
-                        <div className="icon">
+                        <div className="icon" onClick={() => setStep(3)}>
                             <Image src="/new-inventors-form/phone.svg" alt="Contact Information Icon" width={20} height={20} />
                         </div>
                         <h3>Contact Information</h3>
@@ -49,9 +49,9 @@ const NewInventorsForm = () => {
 
                 <div id='new-inventor-form-content' className='mt-8 mb-4 mx-12'>
                     <header className='flex justify-between'>
-                        {step == 1 && <h3 className='text-[#3C3C3C] text-[18px] font-extrabold'>Basic Information</h3>}
-                        {step == 2 && <h3 className='text-[#3C3C3C] text-[18px] font-extrabold'>Professsional Information</h3>}
-                        {step == 3 && <h3 className='text-[#3C3C3C] text-[18px] font-extrabold'>Contact Information</h3>}
+                        {step == 1 && <h3 className='text-[#3C3C3C] text-[18px] leading-[32px] font-extrabold'>Basic Information</h3>}
+                        {step == 2 && <h3 className='text-[#3C3C3C] text-[18px] leading-[32px] font-extrabold'>Professsional Information</h3>}
+                        {step == 3 && <h3 className='text-[#3C3C3C] text-[18px] leading-[32px] font-extrabold'>Contact Information</h3>}
 
                         <div id="nav" className='flex gap-3'>
                             <div id="previous" className='button border border-[#DEDEDE] flex transition-all duration-300 ease-out hover:scale-[104%] 

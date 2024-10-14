@@ -68,7 +68,7 @@ const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
                 <div className="description-country-city flex gap-4">
                     <div id="bio-description" className='label-input'>
                         <label htmlFor="description">Bio/Short Description</label>
-                        <textarea name="bio-description" id="bio-description" placeholder='Tell us about you' className='form-input h-[150%]'></textarea>
+                        <textarea name="bio-description" id="bio-description" maxLength={600} placeholder='Tell us about you' className='form-input h-[150%]'></textarea>
                     </div>
 
                     <section className='flex flex-col w-full'>
