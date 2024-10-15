@@ -22,3 +22,37 @@
     text-wrap: balance;
   }
 }
+
+/* General styles used for add new inventor form */
+
+.icon {
+  @apply bg-[#00B598] flex justify-center items-center p-4 rounded-full w-fit cursor-pointer
+}
+
+.line {
+  @apply bg-[#D3D3D3] w-[100%] h-1 mt-5
+}
+
+.active-line {
+  @apply bg-[#005B4C]
+}
+
+.button {
+  @apply py-3 px-4 font-semibold cursor-pointer
+}
+
+.ease-transition {
+  @apply transition ease-out duration-300
+}
+
+.horizontal-rule {
+  @apply h-[2px] w-full bg-[#F2EBF3] rounded
+}
+
+.label-input {
+  @apply flex flex-col w-full gap-2
+}
+
+.form-input {
+  @apply border border-[#E0E6EB] px-4 py-2 rounded-lg w-full
+}

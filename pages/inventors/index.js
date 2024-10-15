@@ -1,9 +1,10 @@
 import Layout from "@/layouts/main";
+import AddNew from "./add-new";
 
 const Inventors = () => {
   return (
     <div>
-      <p>This is the Inventors page!</p>
+      <AddNew />
     </div>
   );
 };
