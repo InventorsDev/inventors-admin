@@ -23,12 +23,12 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                 <div id="job-company" className='w-full flex gap-4'>
                     <div id="job-div" className='label-input'>
                         <label htmlFor="job">Job title</label>
-                        <input type="name" id="job" name="job" className='form-input' required />
+                        <input type="name" id="job" name="job" placeholder='Enter job title' className='form-input' required />
                     </div>
 
                     <div id="company-div" className='label-input'>
                         <label htmlFor="company">Company/Organization</label>
-                        <input type="name" id="company" name="company" className='form-input' required />
+                        <input type="name" id="company" name="company" placeholder='Enter company name' className='form-input' required />
                     </div>
                 </div>
                 
@@ -43,7 +43,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
 
                     <div id="School / Alumni" className='label-input'>
                         <label htmlFor="school">School/Alumni</label>
-                        <input type="name" id="school" name="school" className='form-input' required />
+                        <input type="name" id="school" name="school" placeholder='Enter School name' className='form-input' required />
                     </div>
                 </div>
 
