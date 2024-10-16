@@ -71,11 +71,10 @@ const Sidebar = () => {
             {topMenuItems.map((menuItem, i) => (
               <li className="text-sm" key={i}>
                 <Link
-                  className={`flex items-center rounded-xl ps-4 py-3 gap-3 ${
-                    router.pathname === menuItem.link
-                      ? "bg-primaryGreen text-white shadow-xl shadow-teal-50"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex items-center rounded-xl ps-4 py-3 gap-3 ${router.pathname === menuItem.link
+                    ? "bg-primaryGreen text-white shadow-xl shadow-teal-50"
+                    : "text-gray-600"
+                    }`}
                   href={menuItem.link}
                 >
                   <Icon icon={menuItem.icon} className="text-lg" />
