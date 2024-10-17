@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import { countries } from '../data';
+import { countries } from './data';
 import { useRef } from 'react';
 
-const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
+const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {
     const fileNameRef = useRef(null);
     const profileImgRef = useRef(null);
 
@@ -18,10 +18,10 @@ const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
         <div id='basic-info-form' className=''>
             <div id="profile-image" className='flex gap-4 my-2'>
                 <div className='p-1 bg-[#F2EBF3] rounded-full'>
-                    <Image 
-                        src={"images/new-inventors-form/avatar.svg"} 
-                        ref={profileImgRef} alt='Selected Profile Picture' 
-                        className='object-cover w-[98px] h-[105px] rounded-full' priority width={98} height={105}/>
+                    <Image
+                        src={"images/new-inventors-form/avatar.svg"}
+                        ref={profileImgRef} alt='Selected Profile Picture'
+                        className='object-cover w-[98px] h-[105px] rounded-full' priority width={98} height={105} />
                 </div>
                 <div id="text-choose-file" className='flex flex-col gap-2 text-sm'>
                     <h4 className='text-[#0B0B0B]'>User Profile Image</h4>
@@ -52,7 +52,7 @@ const BasicInfoForm = ({updateIsBasicInfoFilled}) => {
                         <input type="name" id="last-name" name="last-name" placeholder="Enter your last name" className='form-input' required />
                     </div>
                 </div>
-                
+
                 <div className="email-password flex gap-4">
                     <div id="email-div" className='label-input'>
                         <label htmlFor="email">Email address</label>
