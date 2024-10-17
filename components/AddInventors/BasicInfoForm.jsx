@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { countries } from './data';
+import { countries } from '@/utils/countries';
 import { useRef } from 'react';
 
 const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {

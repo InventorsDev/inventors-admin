@@ -26,11 +26,11 @@
 /* General styles used for add new inventor form */
 
 .icon {
-  @apply bg-[#00B598] flex justify-center items-center p-4 rounded-full w-fit cursor-pointer
+  @apply bg-[#00B598] flex justify-center items-center p-2 rounded-full w-fit cursor-pointer
 }
 
 .line {
-  @apply bg-[#D3D3D3] w-[100%] h-1 mt-5
+  @apply bg-[#D3D3D3] w-[100%] h-[0.15rem] mt-5
 }
 
 .active-line {

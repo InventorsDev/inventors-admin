@@ -4,6 +4,8 @@ import Image from 'next/image';
 
 import Layout from '@/layouts/main';
 
+import { Icon } from '@iconify/react';
+
 import ProfessionalInfoForm from '@/components/AddInventors/ProfessionalInfoForm';
 import ContactInfoForm from '@/components/AddInventors/ContactInfoForm';
 import BasicInfoForm from '@/components/AddInventors/BasicInfoForm';
@@ -55,51 +57,36 @@ const AddNew = () => {
 				>
 					<div
 						id="basic-info"
-						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap"
+						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap cursor-pointer"
+						onClick={() => setStep(1)}
 					>
-						<div className="icon" onClick={() => setStep(1)}>
-							<Image
-								src="images/new-inventors-form/user-03.svg"
-								alt="Basic Information Icon"
-								width={20}
-								height={20}
-							/>
+						<div className="icon">
+							<Icon icon="lets-icons:user" className="text-2xl text-white" />
 						</div>
 						<h3>Basic Information</h3>
 					</div>
 
 					<div className={`line ${step != 1 ? 'active-line' : ''}`}></div>
-
 					<div
 						id="personal-info"
-						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap"
+						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap cursor-pointer"
+						onClick={() => setStep(2)}
 					>
-						<div className="icon" onClick={() => setStep(2)}>
-							<Image
-								src="images/new-inventors-form/briefcase.svg"
-								alt="Professional Info Icon"
-								width={20}
-								height={20}
-							/>
+						<div className="icon">
+							<Icon icon="mynaui:briefcase" className="text-2xl text-white" />
 						</div>
 						<h3>Professional Information</h3>
 					</div>
-
 					<div
 						className={`line ${step != 2 && step != 1 ? 'active-line' : ''}`}
 					></div>
-
 					<div
 						id="contact-info"
-						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap"
+						className="flex flex-col gap-2 font-[400] justify-center items-center text-nowrap cursor-pointer"
+						onClick={() => setStep(3)}
 					>
-						<div className="icon" onClick={() => setStep(3)}>
-							<Image
-								src="images/new-inventors-form/phone.svg"
-								alt="Contact Information Icon"
-								width={20}
-								height={20}
-							/>
+						<div className="icon">
+							<Icon icon="solar:phone-linear" className="text-2xl text-white" />
 						</div>
 						<h3>Contact Information</h3>
 					</div>
@@ -130,12 +117,7 @@ const AddNew = () => {
                             justify-between gap-4 text-[#4A4A4A] w-fit rounded-lg"
 								onClick={goToLastStep}
 							>
-								<Image
-									src={'images/new-inventors-form/left-arrow.svg'}
-									alt="left arrow"
-									width={20}
-									height={20}
-								/>
+								<Icon icon="mynaui:arrow-left" className="text-2xl" />
 								<span>Previous</span>
 							</div>
 
@@ -147,12 +129,7 @@ const AddNew = () => {
 									onClick={goToNextStep}
 								>
 									<span>Next</span>
-									<Image
-										src={'images/new-inventors-form/right-arrow.svg'}
-										alt="right arrow"
-										width={20}
-										height={20}
-									/>
+									<Icon icon="mynaui:arrow-right" className="text-2xl" />
 								</div>
 							) : (
 								<div

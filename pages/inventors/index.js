@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '@/layouts/main';
 
 import { Icon } from '@iconify/react';
@@ -17,6 +18,8 @@ const tabs = [
 ];
 
 const Inventors = () => {
+	const router = useRouter();
+
 	const [selectedLeads, setSelectedLeads] = useState([]);
 	const [searchText, setSearchText] = useState('');
 	const [allLeads, setAllLeads] = useState(inventorsLeads);
@@ -135,7 +138,13 @@ const Inventors = () => {
 							Deactivate ({selectedLeads.length})
 						</Button>
 					) : (
-						<Button primaryButton className={`flex items-center gap-3`}>
+						<Button
+							primaryButton
+							className={`flex items-center gap-3`}
+							buttonProps={{
+								onClick: () => router.push('/inventors/add-new'),
+							}}
+						>
 							<Icon icon="tabler:users" className="text-lg" />
 							Add new
 							<Icon
