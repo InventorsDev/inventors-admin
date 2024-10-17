@@ -92,7 +92,7 @@ const AddNew = () => {
 					</div>
 				</div>
 
-				<div id="new-inventor-form-content" className="mt-8 mb-4 mx-12">
+				<div id="new-inventor-form-content" className="mt-10 mb-4 mx-12">
 					<header className="flex justify-between">
 						{step == 1 && (
 							<h3 className="text-[#3C3C3C] text-[18px] leading-[32px] font-extrabold">
@@ -110,7 +110,7 @@ const AddNew = () => {
 							</h3>
 						)}
 
-						<div id="nav" className="flex gap-3">
+						<div id="nav" className="flex gap-5">
 							<div
 								id="previous"
 								className="button border border-[#DEDEDE] flex transition-all duration-300 ease-out hover:scale-[104%] 
@@ -138,12 +138,7 @@ const AddNew = () => {
                                 transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit"
 								>
 									<span>Submit</span>
-									<Image
-										src={'images/new-inventors-form/right-arrow.svg'}
-										alt="right arrow"
-										width={20}
-										height={20}
-									/>
+									<Icon icon="mynaui:arrow-right" className="text-2xl" />
 								</div>
 							)}
 						</div>

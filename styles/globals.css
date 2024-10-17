@@ -50,9 +50,9 @@
 }
 
 .label-input {
-  @apply flex flex-col w-full gap-2
+  @apply flex flex-col w-full gap-2 text-sm
 }
 
 .form-input {
-  @apply border border-[#E0E6EB] px-4 py-2 rounded-lg w-full
+  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full
 }
