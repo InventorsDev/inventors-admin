@@ -3,72 +3,10 @@ import Layout from '@/layouts/main';
 
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import Button from '@/components/Button';
 
-const leads = [
-	{
-		id: 1,
-		name: 'Happiness Omale',
-		position: 'Data lead',
-		school: 'OAUSTECH (Alumni)',
-		email: 'omalehappiness@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Approved',
-	},
-	{
-		id: 2,
-		name: 'Owosupi Kehinde',
-		position: 'Backend lead',
-		school: 'OAUSTECH (Alumni)',
-		email: 'owosupikehinde@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Approved',
-	},
-	{
-		id: 3,
-		name: 'Adesokan Oluwajuwon',
-		position: 'Co-Founder',
-		school: 'OAUSTECH (Alumni)',
-		email: 'adesokanoluwa@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Declined',
-	},
-	{
-		id: 4,
-		name: 'Kelvin Doe',
-		position: 'Community lead',
-		school: 'Bells University',
-		email: 'kelvin@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Deactivated',
-	},
-	{
-		id: 5,
-		name: 'Owosupi Kehinde',
-		position: 'Backend lead',
-		school: 'OAUSTECH (Alumni)',
-		email: 'owosupikehinde@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Approved',
-	},
-	{
-		id: 6,
-		name: 'Kelvin Doe',
-		position: 'Backend lead',
-		school: 'Bells University',
-		email: 'kelvin@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Unapproved',
-	},
-	{
-		id: 7,
-		name: 'Kelvin Doe',
-		position: 'Software engineer',
-		school: 'Bells University',
-		email: 'kelvin@gmail.com',
-		phone: '+234 706 765 2134',
-		status: 'Approved',
-	},
-];
+import { inventorsLeads } from '@/utils/leads';
+import { shortenEmail, shortenPhone } from '@/utils/helpers';
 
 const tabs = [
 	{ name: 'All', active: true },
@@ -81,7 +19,7 @@ const tabs = [
 const Inventors = () => {
 	const [selectedLeads, setSelectedLeads] = useState([]);
 	const [searchText, setSearchText] = useState('');
-	const [allLeads, setAllLeads] = useState(leads);
+	const [allLeads, setAllLeads] = useState(inventorsLeads);
 	const [filteredLeads, setFilteredLeads] = useState([]);
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -89,10 +27,10 @@ const Inventors = () => {
 
 	const indexOfLastLead = currentPage * leadsPerPage;
 	const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-	const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+	const currentLeads = filteredLeads?.slice(indexOfFirstLead, indexOfLastLead);
 
 	const nextPage = () => {
-		if (currentPage < Math.ceil(filteredLeads.length / leadsPerPage)) {
+		if (currentPage < Math.ceil(filteredLeads?.length / leadsPerPage)) {
 			setCurrentPage(currentPage + 1);
 		}
 	};
@@ -144,8 +82,8 @@ const Inventors = () => {
 					type="checkbox"
 					className="accent-primaryGreen"
 					checked={
-						filteredLeads.length > 0 &&
-						selectedLeads.length === filteredLeads.length
+						filteredLeads?.length > 0 &&
+						selectedLeads.length === filteredLeads?.length
 					}
 					onChange={(e) => {
 						if (e.target.checked) {
@@ -160,10 +98,9 @@ const Inventors = () => {
 			),
 		},
 		{ key: 'name', content: 'Name' },
-		{ key: 'position', content: 'Position' },
 		{ key: 'school', content: 'School (Alumni)' },
 		{ key: 'email', content: 'Email' },
-		{ key: 'phone', content: 'Phone' },
+		{ key: 'phone', content: 'Phone', className: 'hidden lg:block' },
 		{ key: 'status', content: 'Status' },
 		{ key: 'action', content: 'Action' },
 	];
@@ -180,29 +117,32 @@ const Inventors = () => {
 					className="border-[2px] border-[#E0E6EB] p-3 rounded-lg w-1/4 outline-none text-[#98A4AE]"
 				/>
 				<div className="flex gap-4 items-center">
-					<button
-						className="bg-mintGreen text-primaryGreen rounded-lg py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
-						onClick={() => setSelectedLeads(filteredLeads)}
-						disabled={filteredLeads.length === selectedLeads.length}
+					<Button
+						mintGreenBtn
+						buttonProps={{
+							onClick: () => setSelectedLeads(filteredLeads),
+							disabled: filteredLeads?.length === selectedLeads.length,
+						}}
+						className="disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{selectedLeads.length > 0
 							? `Selected (${selectedLeads.length})`
 							: 'Select all'}
-					</button>
+					</Button>
 					{selectedLeads.length > 0 ? (
-						<button className="text-[#AA0010] bg-transparent rounded-lg py-3 px-4 flex items-center gap-3 border-2 border-[#AA0010]">
+						<Button dangerButton className={`flex items-center gap-3`}>
 							<Icon icon="bi:trash" className="text-lg" />
 							Deactivate ({selectedLeads.length})
-						</button>
+						</Button>
 					) : (
-						<button className="bg-primaryGreen text-white rounded-lg py-3 px-4 flex items-center gap-3">
+						<Button primaryButton className={`flex items-center gap-3`}>
 							<Icon icon="tabler:users" className="text-lg" />
 							Add new
 							<Icon
 								icon="solar:alt-arrow-down-line-duotone"
 								className="text-lg"
 							/>
-						</button>
+						</Button>
 					)}
 				</div>
 			</div>
@@ -219,14 +159,14 @@ const Inventors = () => {
 							onClick={() => {
 								// Filter leads based on tab
 								if (tab.name === 'All') {
-									setFilteredLeads(leads);
+									setFilteredLeads(allLeads);
 									tabs.forEach((tab) => (tab.active = false));
 									tab['active'] = true;
 									setSelectedLeads([]);
 									setSearchText('');
 								} else {
 									setFilteredLeads(
-										leads.filter((lead) => lead.status === tab.name)
+										allLeads?.filter((lead) => lead.status === tab.name)
 									);
 									tabs.forEach((tab) => (tab.active = false));
 									tab['active'] = true;
@@ -241,7 +181,7 @@ const Inventors = () => {
 				</ul>
 			</div>
 
-			{currentLeads.length === 0 && (
+			{currentLeads?.length === 0 && (
 				<div className="h-[600px] w-full flex justify-center items-center">
 					<div className="bg-white rounded-xl p-7 space-y-4 flex justify-center flex-col items-center">
 						<Image
@@ -256,28 +196,29 @@ const Inventors = () => {
 								Oops, Nothing to see here, right?
 							</h3>
 							<p className="text-[#98A4AE]">Let’s get your profile set up.</p>
-							<button className="bg-primaryGreen text-white rounded-lg py-3 px-4">
-								Go to profile
-							</button>
+							<Button primaryButton>Go to profile</Button>
 						</div>
 					</div>
 				</div>
 			)}
 
-			{currentLeads.length > 0 && (
+			{currentLeads?.length > 0 && (
 				<>
 					<div className="bg-white rounded-xl p-6 mt-5">
 						<table className="min-w-full">
 							<thead className="text-left text-[#464646] font-normal">
 								<tr className="border-b-[2px] border-[#EFF2F7]">
 									{tableHeaders.map((header) => (
-										<th key={header.key} className="py-4 px-5">
+										<th
+											key={header.key}
+											className={`py-4 px-5 ${header.className}`}
+										>
 											{header.content}
 										</th>
 									))}
 								</tr>
 							</thead>
-							<tbody className="overflow-y-scroll  overflow-auto">
+							<tbody className="">
 								{currentLeads?.map((lead, index) => (
 									<tr
 										key={index}
@@ -329,11 +270,14 @@ const Inventors = () => {
 											</div>
 										</td>
 										<td className="py-4 px-5 text-[#B5B5B5]">
-											{lead.position}
+											{lead.school + (lead.alumni ? ' (Alumni)' : '')}
 										</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">{lead.school}</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">{lead.email}</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">{lead.phone}</td>
+										<td className="py-4 px-5 text-[#B5B5B5]">
+											{shortenEmail(lead.email)}
+										</td>
+										<td className="py-4 px-5 text-[#B5B5B5] hidden lg:block">
+											{shortenPhone(lead.phone)}
+										</td>
 										<td className="py-4 px-5">
 											<span
 												className={`${
@@ -364,25 +308,29 @@ const Inventors = () => {
 					<div className="flex items-center justify-between w-full pt-5 px-5 font-semibold">
 						<p className="text-[#070707]">
 							Page {currentPage} of{' '}
-							{Math.ceil(filteredLeads.length / leadsPerPage)}
+							{Math.ceil(filteredLeads?.length / leadsPerPage)}
 						</p>
 						<div className="flex gap-4 items-center">
-							<button
-								className="bg-white text-[#344054] py-2 px-4 rounded-lg border border-[#D0D5DD] disabled:opacity-50 disabled:cursor-not-allowed"
-								disabled={currentPage === 1}
-								onClick={prevPage}
+							<Button
+								className={`disabled:opacity-50 disabled:cursor-not-allowed`}
+								buttonProps={{
+									onClick: prevPage,
+									disabled: currentPage === 1,
+								}}
 							>
 								Prev
-							</button>
-							<button
-								className="bg-white text-[#344054] py-2 px-4 rounded-lg border border-[#D0D5DD] disabled:opacity-50 disabled:cursor-not-allowed"
-								onClick={nextPage}
-								disabled={
-									currentPage === Math.ceil(filteredLeads.length / leadsPerPage)
-								}
+							</Button>
+							<Button
+								className={`disabled:opacity-50 disabled:cursor-not-allowed`}
+								buttonProps={{
+									onClick: nextPage,
+									disabled:
+										currentPage ===
+										Math.ceil(filteredLeads?.length / leadsPerPage),
+								}}
 							>
-								Next{' '}
-							</button>
+								Next
+							</Button>
 						</div>
 					</div>
 				</>
