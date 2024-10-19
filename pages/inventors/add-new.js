@@ -4,6 +4,8 @@ import Image from 'next/image';
 
 import Layout from '@/layouts/main';
 
+import Button from '@/components/Button';
+
 import { Icon } from '@iconify/react';
 
 import ProfessionalInfoForm from '@/components/AddInventors/ProfessionalInfoForm';
@@ -53,7 +55,7 @@ const AddNew = () => {
 			<div className="white-background-section w-full h-full bg-white rounded-xl py-6 pb-2 px-14">
 				<div
 					id="form-steps"
-					className="text-[14px] bg-[#F3FBFA] mx-12 flex px-4 py-2 rounded-xl"
+					className="text-[14px] bg-mintGreen mx-12 flex px-4 py-4 rounded-xl"
 				>
 					<div
 						id="basic-info"
@@ -93,7 +95,7 @@ const AddNew = () => {
 				</div>
 
 				<div id="new-inventor-form-content" className="mt-10 mb-4 mx-12">
-					<header className="flex justify-between">
+					<header className="flex justify-between items-center mb-5">
 						{step == 1 && (
 							<h3 className="text-[#3C3C3C] text-[18px] leading-[32px] font-extrabold">
 								Basic Information
@@ -111,35 +113,35 @@ const AddNew = () => {
 						)}
 
 						<div id="nav" className="flex gap-5">
-							<div
-								id="previous"
-								className="button border border-[#DEDEDE] flex transition-all duration-300 ease-out hover:scale-[104%] 
-                            justify-between gap-4 text-[#4A4A4A] w-fit rounded-lg"
-								onClick={goToLastStep}
+							<Button
+								className={`flex items-center gap-3`}
+								buttonProps={{
+									onClick: goToLastStep,
+									id: 'previous',
+								}}
 							>
 								<Icon icon="mynaui:arrow-left" className="text-2xl" />
-								<span>Previous</span>
-							</div>
+								Previous
+							</Button>
 
 							{step != 3 ? (
-								<div
-									id="next"
-									className="button bg-[#00977F] flex justify-between ease-transition scale-[102%] gap-[2.9rem] text-white 
-                            transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit"
-									onClick={goToNextStep}
+								<Button
+									primaryButton
+									className={`flex items-center gap-3`}
+									buttonProps={{ onClick: goToNextStep, id: 'next' }}
 								>
-									<span>Next</span>
+									Next
 									<Icon icon="mynaui:arrow-right" className="text-2xl" />
-								</div>
+								</Button>
 							) : (
-								<div
-									id="next"
-									className="button bg-[#00977F] flex justify-between ease-transition scale-[102%] gap-[2.9rem] text-white 
-                                transition-all duration-300 ease-out hover:scale-[104%] rounded-lg w-fit"
+								<Button
+									primaryButton
+									className={`flex items-center gap-3`}
+									buttonProps={{ id: 'next' }}
 								>
-									<span>Submit</span>
+									Submit
 									<Icon icon="mynaui:arrow-right" className="text-2xl" />
-								</div>
+								</Button>
 							)}
 						</div>
 					</header>
@@ -167,5 +169,9 @@ const AddNew = () => {
 export default AddNew;
 
 AddNew.getLayout = function getLayout(page) {
-	return <Layout>{page}</Layout>;
+	return (
+		<Layout title="Add new user" showBackButton>
+			{page}
+		</Layout>
+	);
 };

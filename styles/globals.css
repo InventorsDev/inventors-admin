@@ -30,7 +30,7 @@
 }
 
 .line {
-  @apply bg-[#D3D3D3] w-[100%] h-[0.15rem] mt-5
+  @apply bg-[#D3D3D3] w-[100%] h-[0.1rem] mt-5
 }
 
 .active-line {
@@ -50,9 +50,13 @@
 }
 
 .label-input {
-  @apply flex flex-col w-full gap-2 text-sm
+  @apply flex flex-col w-full gap-2 text-sm text-[#29343D]
 }
 
 .form-input {
-  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full
+  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full ease-transition text-lightGray
+}
+
+.form-input:focus {
+  @apply outline-primaryGreen
 }
