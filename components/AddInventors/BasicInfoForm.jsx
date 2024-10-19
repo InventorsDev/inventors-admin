@@ -16,12 +16,12 @@ const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {
 
     return (
         <div id='basic-info-form' className=''>
-            <div id="profile-image" className='flex gap-4 my-2'>
+            <div id="profile-image" className='flex items-center gap-4 my-2'>
                 <div className='p-1 bg-[#F2EBF3] rounded-full'>
                     <Image
-                        src={"images/new-inventors-form/avatar.svg"}
+                        src={"/images/new-inventors-form/avatar.svg"}
                         ref={profileImgRef} alt='Selected Profile Picture'
-                        className='object-cover w-[98px] h-[105px] rounded-full' priority width={98} height={105} />
+                        className='object-cover w-[110px] h-[110px] rounded-full' priority width={98} height={105} />
                 </div>
                 <div id="text-choose-file" className='flex flex-col gap-2 text-sm'>
                     <h4 className='text-[#0B0B0B]'>User Profile Image</h4>
@@ -38,10 +38,10 @@ const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {
                 </div>
             </div>
 
-            <div className='horizontal-rule'></div>
+            <div className='horizontal-rule my-10'></div>
 
-            <form action="submit" className='text-[14px] leading-[24px] flex flex-col gap-1 font-[400] text-[#29343D] pt-4'>
-                <div className="name flex w-full gap-4">
+            <form action="submit" className='text-[14px] leading-[24px] flex flex-col gap-1 font-[400] text-[#29343D]'>
+                <div className="name flex w-full gap-4 mb-4">
                     <div id="first-name-div" className='label-input'>
                         <label htmlFor="first-name">First Name</label>
                         <input type="name" id="first-name" placeholder="Enter your first name" name="first-name" className='form-input' required />
@@ -53,7 +53,7 @@ const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {
                     </div>
                 </div>
 
-                <div className="email-password flex gap-4">
+                <div className="email-password flex gap-4 mb-4">
                     <div id="email-div" className='label-input'>
                         <label htmlFor="email">Email address</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email address" className='form-input' required />
@@ -65,14 +65,14 @@ const BasicInfoForm = ({ updateIsBasicInfoFilled }) => {
                     </div>
                 </div>
 
-                <div className="description-country-city flex gap-4">
+                <div className="description-country-city flex gap-4 mb-4">
                     <div id="bio-description" className='label-input'>
                         <label htmlFor="description">Bio/Short Description</label>
-                        <textarea name="bio-description" id="bio-description" maxLength={600} placeholder='Tell us about you' className='form-input h-[150%]'></textarea>
+                        <textarea name="bio-description" id="bio-description" maxLength={600} placeholder='Tell us about you' className='form-input h-[150%] resize-none'></textarea>
                     </div>
 
                     <section className='flex flex-col w-full'>
-                        <div id="Phone" className='label-input'>
+                        <div id="Phone" className='label-input mb-4'>
                             <label htmlFor="phone">Phone</label>
                             <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" className='form-input' />
                         </div>
