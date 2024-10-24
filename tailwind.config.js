@@ -14,6 +14,8 @@ module.exports = {
         mintGreen: "var(--mint-green)",
         darkGray: "var(--dark-gray)",
         lightGray: "var(--light-gray)",
+        primary: "#00977F",
+        destructive: "#B42318",
       },
     },
   },
