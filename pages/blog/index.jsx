@@ -1,9 +1,12 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Layout from '@/layouts/main';
+import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 
 const blogs = [
     {
+        id: 1,
         title: 'Getting started with Tech',
         description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
         views: 0,
@@ -11,6 +14,7 @@ const blogs = [
         approved: false
     },
     {
+        id: 2,
         title: 'Getting started with Tech',
         description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
         views: 440,
@@ -18,6 +22,31 @@ const blogs = [
         approved: true
     },
     {
+        id: 3,
+        title: 'Getting started with Tech',
+        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+        views: 440,
+        image: "/images/blogs/thumbnail.png",
+        approved: true
+    },
+    {
+        id: 4,
+        title: 'Getting started with Tech',
+        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+        views: 0,
+        image: "/images/blogs/thumbnail.png",
+        approved: false
+    },
+    {
+        id: 5,
+        title: 'Getting started with Tech',
+        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+        views: 440,
+        image: "/images/blogs/thumbnail.png",
+        approved: true
+    },
+    {
+        id: 6,
         title: 'Getting started with Tech',
         description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
         views: 440,
@@ -27,11 +56,54 @@ const blogs = [
 ]
 
 const Blogs = () => {
+    const [selectedItems, updateSelectedItems] = useState([]);
+
+    useEffect(() => {
+        console.log(selectedItems);
+    }, [selectedItems])
+
+    const handleBlogSelection = (e, checked) => {
+        const blogPost = e.target.closest(".blog-post"); // Assuming the parent element with the ID is a ".blog-post" class.
+        const blogPostId = blogPost.id;
+        
+        if (!checked) {             
+            // Add the ID to selectedItems if checked is false
+            updateSelectedItems((prev) => [...prev, blogPostId]);         
+        } else {             
+            // Remove the ID from selectedItems if checked is true
+            updateSelectedItems((prev) => prev.filter(itemId => itemId !== blogPostId));         
+        } 
+    }
+
     return (
-        <div className='blogs-content w-full min-h-screen'>
-            <div className="flex flex-col justify-between gap-5 p-0 lg:flex-row lg:p-5">
+        <div className='blogs-content w-full min-h-screen p-0 lg:p-5'>
+            <div className="search-select-delete flex w-full py-3 justify-between bg-white mb-2 px-4 rounded-xl shadow-[0px 1.41px 2.83px -0.71px #AFB6C933] lg:mb-3">
+                <input type="text" id='blog-search' className='px-4 w-full mx-2 h-fit self-center py-3 border-2 border-gray-300 rounded-xl
+                md:w-fit' placeholder='Search blog'/>
+
+                <div id="select-delete" className='bg-white p-2 gap-3 hidden md:flex lg:p-4'>
+                    <div id='selected-blogs-count' className="bg-green-100 text-sm rounded-lg p-3 text-[#00B598]">Selected ({selectedItems.length})</div>
+                    <button id='delete-selected-blogs' className='flex gap-2 items-center border-2 rounded-lg p-3 border-red-700 ease-transition hover:border-red-500'>
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg" className='scale-[120%]'>
+                            <path d="M5.60645 1.20312H9.60645M1.60645 3.20313H13.6064M12.2731 3.20313L11.8056 10.216C11.7354 11.2681 11.7004 11.7942 11.4731 12.1931C11.2731 12.5443 10.9713 12.8266 10.6076 13.0029C10.1944 13.2031 9.66718 13.2031 8.61268 13.2031H6.60022C5.54572 13.2031 5.01847 13.2031 4.60534 13.0029C4.24162 12.8266 3.93984 12.5443 3.73977 12.1931C3.51252 11.7942 3.47745 11.2681 3.4073 10.216L2.93978 3.20313M6.27311 6.20313V9.53646M8.93978 6.20313V9.53646" stroke="#AA0010" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className='text-red-700 text-sm'>Delete ({selectedItems.length})</span>
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-col justify-between gap-5 py-2 md:grid md:grid-cols-2 lg:grid-cols-3">
                 {Array.from(blogs).map((blog, index) => 
-                    <BlogItem key={index} thumbnail={blog.image} title={blog.title} description={blog.description} approved = {blog.approved} viewCount = {blog.views} />
+                    <BlogItem 
+                        id={blog.id}
+                        key={index} 
+                        thumbnail={blog.image} 
+                        title={blog.title} 
+                        description={blog.description} 
+                        approved = {blog.approved} 
+                        viewCount = {blog.views} 
+                        handleCheckedState = {(e, checked) => handleBlogSelection(e, checked)} 
+                    />
                 )}
             </div>
         </div>
@@ -40,7 +112,10 @@ const Blogs = () => {
 
 const BlogItem = (props) => {
     return (
-        <div className='blog-item w-fit bg-white p-3 pb-6 border-2 border-[#D3D3D3] rounded-lg'>
+        <div className='blog-post w-fit bg-white p-3 pb-6 border-2 border-[#D3D3D3] relative rounded-lg' id={props.id}>
+            {/* absolute select checkbox */}
+            <CustomCheckbox updateCheckedState = {(checked) => handleBlogSelection} handleCheckedState = {(e, checked) => props.handleCheckedState(e, checked)}/>
+
             <Image src={props.thumbnail} alt='Blog cover Image' className='rounded-lg min-w-full' width={288} height={140} />
             <h2 className="font-[700] text-[#333333] text-[20px] leading-[28px] py-4">{props.title}</h2>
             <p className='font-[400] text-sm leading-[24px] text-gray-500 text-wrap w-full'>{`${props.description.slice(0,102)}...`}</p>
