@@ -25,7 +25,6 @@ const CreateBlog = () => {
 
     if (!formData.title.trim() || !formData.content.trim()) {
       setTimeout(() => setError(null), 3000);
-
       return setError("all fields are required");
     } else {
       setSuccessMsg("successfully submitted");
@@ -45,7 +44,7 @@ const CreateBlog = () => {
       <div>
         <div className="flex items-center justify-between">
           <h1 className="md:font-bold font-semibold md:text-3xl text-2xl text-gray-600">
-            Create blog
+            Create Blog
           </h1>
           <span className="flex items-center gap-8">
             <h1 className="font-semibold text-gray-600">Preview</h1>
@@ -74,7 +73,7 @@ const CreateBlog = () => {
               onClick={() => fileInputRef.current.click()} // Trigger the file input click
               className="text-center mb-3 rounded-md bg-[#eceaeab9] text-primaryGreen p-3 font-semibold w-full"
             >
-              Add cover photo
+              Add a cover photo
             </button>
 
             <input
