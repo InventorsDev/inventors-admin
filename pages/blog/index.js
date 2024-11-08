@@ -73,7 +73,7 @@ const CreateBlog = () => {
               onClick={() => fileInputRef.current.click()} // Trigger the file input click
               className="text-center mb-3 rounded-md bg-[#eceaeab9] text-primaryGreen p-3 font-semibold w-full"
             >
-              Add a cover photo
+              Add cover photo
             </button>
 
             <input
