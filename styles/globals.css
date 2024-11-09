@@ -26,11 +26,11 @@
 /* General styles used for add new inventor form */
 
 .icon {
-  @apply bg-[#00B598] flex justify-center items-center p-4 rounded-full w-fit cursor-pointer
+  @apply bg-[#00B598] flex justify-center items-center p-2 rounded-full w-fit cursor-pointer
 }
 
 .line {
-  @apply bg-[#D3D3D3] w-[100%] h-1 mt-5
+  @apply bg-[#D3D3D3] w-[100%] h-[0.1rem] mt-5
 }
 
 .active-line {
@@ -50,11 +50,11 @@
 }
 
 .label-input {
-  @apply flex flex-col w-full gap-2
+  @apply flex flex-col w-full gap-2 text-sm text-[#29343D]
 }
 
 .form-input {
-  @apply border border-[#E0E6EB] px-4 py-2 rounded-lg w-full
+  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full ease-transition text-lightGray
 }
 
 /* 
@@ -66,4 +66,8 @@ ________________________________________________________________________________
 
 .active-page-number {
   @apply border-2 border-orange-400 text-black
+}
+
+.form-input:focus {
+  @apply outline-primaryGreen
 }
