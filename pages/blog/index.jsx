@@ -50,7 +50,7 @@ const Blogs = () => {
         },
         {
             id: 6,
-            title: 'Getting started with Tech',
+            title: 'Getting started with AI',
             description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
             views: 980,
             image: "/images/blogs/thumbnail.png",
@@ -107,6 +107,7 @@ const Blogs = () => {
     ]);
     const [pages, updatePages] = useState([]);
     const [blogsToShow, updateBlogsToShow] = useState([]);
+    const [searchResults, updateSearchResults] = useState([]);
 
     const [selectedItems, updateSelectedItems] = useState([]);
     const [deleteModalHidden, updateDeleteModalHidden] = useState(true);
@@ -162,9 +163,24 @@ const Blogs = () => {
         return grouped;
     };
 
+    function filterBlogs(searchValue, blogToShow) {
+        if (searchValue == "") updateSearchResults([]);
+        if (!searchValue) return blogToShow; // Return original list if search is empty
+    
+        const lowercasedSearch = searchValue.toLowerCase(); // Normalize search input
+    
+        const searchResultsList = [...blogToShow].filter(blog => 
+            blog.title.toLowerCase().includes(lowercasedSearch) || 
+            blog.description.toLowerCase().includes(lowercasedSearch)
+        );
+        console.log(searchResultsList);
+
+        updateSearchResults(searchResultsList);
+    }    
+
     const changePage = (currentIndex) => {
         updateCurrentPageIndex(currentIndex);
-        console.log(currentPageIndex);
+        updateSearchResults([]);
     }
 
     return (
@@ -173,7 +189,7 @@ const Blogs = () => {
                 <div className='flex flex-col gap-4 items-center'>
                     <Image src={"/images/blogs/delete-blog.svg"} width={105} height={110} />
                     <h2 className='font-extrabold text-[18px]'>Delete blogs?</h2>
-                    <p className='text-gray-400 text-sm'>You&apos;re about to delete {selectedItems.length} blogs</p>
+                    <p className='text-gray-400 text-sm'>You&apos;re about to delete {selectedItems.length} {selectedItems.length == 1? "blog": "blogs"}</p>
                     
                     <div id="btns" className='flex gap-4'>
                         <button className='bg-red-100 rounded-xl flex items-center gap-2 px-4 py-3' onClick={deleteBlogPosts}>
@@ -197,7 +213,7 @@ const Blogs = () => {
                 <>
                     <div className="search-select-delete flex w-full py-3 justify-between bg-white mb-2 px-4 rounded-xl shadow-[0px 1.41px 2.83px -0.71px #AFB6C933] lg:mb-3">
                         <input type="text" id='blog-search' className='px-4 w-full mx-2 h-fit self-center py-3 border-2 border-gray-300 rounded-xl
-                        md:w-fit' placeholder='Search blog'/>
+                        md:w-fit' placeholder='Search blog' onChange={(e) => {/*filterBlogs(e.target.value, pages[currentPageIndex])*/}}/>
 
                         <div id="select-delete" className='bg-white p-2 gap-3 hidden md:flex lg:p-4'>
                             <div id='selected-blogs-count' className="bg-green-100 text-sm rounded-lg p-3 text-[#00B598]">Selected ({selectedItems.length})</div>
@@ -216,9 +232,10 @@ const Blogs = () => {
                     </div>
 
                     <div className="flex flex-col justify-between gap-5 py-2 md:grid md:grid-cols-2 lg:grid-cols-3">
-                        {Array.from(pages[currentPageIndex]).map((blog, index) => 
+                        {searchResults.length == 0 ? Array.from(pages[currentPageIndex]).map((blog, index) => 
                             <BlogItem 
                                 id={blog.id}
+                                searchResults = {searchResults}
                                 key={index} 
                                 thumbnail={blog.image} 
                                 title={blog.title} 
@@ -227,11 +244,23 @@ const Blogs = () => {
                                 viewCount = {blog.views} 
                                 handleCheckedState = {(e, checked) => handleBlogSelection(e, checked)} 
                             />
-                        )}
+                        ): Array.from(searchResults).map((blog, index) => 
+                            <BlogItem 
+                                id={blog.id}
+                                searchResults = {searchResults}
+                                key={index} 
+                                thumbnail={blog.image} 
+                                title={blog.title} 
+                                description={blog.description} 
+                                approved = {blog.approved} 
+                                viewCount = {blog.views} 
+                                handleCheckedState = {(e, checked) => handleBlogSelection(e, checked)} 
+                            />)
+                        }
                     </div>
 
                     <div id="pages" className='flex p-6 py-4 mt-4 gap-4 items-center justify-end rounded-2xl bg-white'> 
-                        <h3 className='text-black font-semibold'>Page {parseInt(currentPageIndex) + 1} of {(pages.length)}</h3>
+                        <h3 className='text-black text-sm sm:text-base font-semibold'>Page {parseInt(currentPageIndex) + 1} of {(pages.length)}</h3>
                         <div className="page-list flex gap-2">
                             {pages.map((page, index) => (
                                 <span 
@@ -249,7 +278,7 @@ const Blogs = () => {
                                 disabled={currentPageIndex == 0} id='left-arrow'
                                 onClick={() => changePage(parseInt(currentPageIndex) - 1)}
                             >
-                                <Image src={"/images/blogs/left-arrow-icon.svg"} width={8} height={16} alt='left-arrow'/>
+                                <Image src={"/images/blogs/left-arrow-icon.svg"} className='min-w-[6px] min-h-[12px]' width={8} height={16} alt='left-arrow'/>
                             </button>
 
                             <button 
@@ -257,7 +286,7 @@ const Blogs = () => {
                                 disabled={pages.length == parseInt(currentPageIndex) + 1} id='right-arrow'
                                 onClick={() => changePage(parseInt(currentPageIndex) + 1)}
                             >
-                                <Image src={"/images/blogs/right-arrow-icon.svg"} width={8} height={16} alt='right-arrow'/>
+                                <Image src={"/images/blogs/right-arrow-icon.svg"} className='min-w-[6px] min-h-[12px]' width={8} height={16} alt='right-arrow'/>
                             </button>
                         </div>
                     </div>
@@ -297,7 +326,7 @@ const BlogItem = (props) => {
                     </svg>
                     <span>Approved</span>
                 </div>
-                :<div className='pending-status absolute bottom-6 rounded-3xl self-end mt-5 text-red-700 p-2 px-4 bg-red-100 flex gap-2 items-center'>
+                :<div className={`lg:${props.searchResults? "relative": "absolute"} pending-status h-full lg:h-fit lg:absolute bottom-6 rounded-3xl self-end mt-5 text-red-700 p-2 px-4 bg-red-100 flex gap-2 items-center`}>
                     <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" className='scale-[120%]'>
                         <path d="M4.99967 9.88802C2.52884 9.88802 0.520508 7.87969 0.520508 5.40885C0.520508 2.93802 2.52884 0.929688 4.99967 0.929688C7.47051 0.929688 9.47884 2.93802 9.47884 5.40885C9.47884 7.87969 7.47051 9.88802 4.99967 9.88802ZM4.99967 1.55469C2.87467 1.55469 1.14551 3.28385 1.14551 5.40885C1.14551 7.53385 2.87467 9.26302 4.99967 9.26302C7.12467 9.26302 8.85384 7.53385 8.85384 5.40885C8.85384 3.28385 7.12467 1.55469 4.99967 1.55469Z" fill="#D50014"/>
                         <path d="M6.54544 7.0474C6.49128 7.0474 6.43711 7.0349 6.38711 7.00156L5.09544 6.23073C4.77461 6.03906 4.53711 5.61823 4.53711 5.2474V3.53906C4.53711 3.36823 4.67878 3.22656 4.84961 3.22656C5.02044 3.22656 5.16211 3.36823 5.16211 3.53906V5.2474C5.16211 5.3974 5.28711 5.61823 5.41628 5.69323L6.70794 6.46406C6.85794 6.55156 6.90378 6.74323 6.81628 6.89323C6.75378 6.99323 6.64961 7.0474 6.54544 7.0474Z" fill="#D50014"/>
