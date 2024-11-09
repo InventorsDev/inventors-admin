@@ -58,8 +58,11 @@ const blogs = [
 ]
 
 const Blogs = () => {
+    const pages = [[],[],[],[],[],[]];
+
     const [selectedItems, updateSelectedItems] = useState([]);
     const [deleteModalHidden, updateDeleteModalHidden] = useState(true);
+    const [currentPage, updateCurrentPage] = useState(3);
 
     const router = useRouter();
 
@@ -150,8 +153,30 @@ const Blogs = () => {
                             />
                         )}
                     </div>
+
+                    <div id="pages" className='flex p-6 py-4 mt-4 gap-4 items-center justify-end rounded-2xl bg-white'> 
+                        <h3 className='text-black font-semibold'>Page 1 of {pages.length}</h3>
+                        <div className="page-list flex gap-2">
+                            {pages.map((page, index) => (
+                                <span 
+                                    className={`text-sm px-2 py-1 leading-[21px] text-[#98A2B3] ${currentPage == (index + 1) && "active-page-number"}`}
+                                >
+                                    {index + 1}
+                                </span>
+                        ))}</div>
+                        <div id="arrows" className='flex'>
+                            <button className={`bg-[#00B598] p-4 rounded-2xl rounded-r-none`} id='left-arrow'>
+                                <Image src={"/images/blogs/left-arrow-icon.svg"} width={8} height={16} alt='left-arrow'/>
+                            </button>
+
+                            <button className='bg-[#00B598] p-4 rounded-2xl rounded-l-none' id='right-arrow'>
+                                <Image src={"/images/blogs/right-arrow-icon.svg"} width={8} height={16} alt='right-arrow'/>
+                            </button>
+                        </div>
+                    </div>
+
                 </>
-            : <div id='no-blog-posts-content' className='bg-white flex flex-col rounded-lg py-5 justify-center items-center gap-3'>
+            :<div id='no-blog-posts-content' className='bg-white flex flex-col rounded-lg py-5 justify-center items-center gap-3'>
                 <Image src={"/images/blogs/no-blog-posts.svg"} width={289} height={320} alt='no-blog-posts-svg'/>
                 <span className='text-sm leading-[28px] text-[#464646]'>Nothing here, create your first blog</span>
                 <button 
