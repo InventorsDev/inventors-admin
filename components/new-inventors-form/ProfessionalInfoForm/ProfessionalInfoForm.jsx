@@ -37,7 +37,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                         <label htmlFor="experience">Years of Experience</label>
                         <select name="experience" id="experience" className='form-input cursor-pointer'>
                             <option value="">Select</option>
-                            {yearsOfExperience.map(item => <option value={item}>{item}</option>)}
+                            {yearsOfExperience.map(item => <option value={item} key={item}>{item}</option>)}
                         </select>
                     </div>
 
@@ -55,7 +55,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                         <select name='primary-skill' id='primary-skill' className='form-input'>
                             <option value="">select</option>
                             {skills.map((skill) => (
-                                <option value={skill}>{skill}</option>
+                                <option value={skill} key={skill}>{skill}</option>
                             ))}
                         </select>
                     </div>
@@ -65,7 +65,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                         <select name='secondary-skill' id='secondary-skill' className='form-input cursor-pointer'>
                             <option value="">select</option>
                             {skills.map((skill) => (
-                                <option value={skill}>{skill}</option>
+                                <option value={skill} key={skill}>{skill}</option>
                             ))}
                         </select>
                     </div>
@@ -76,7 +76,7 @@ const ProfessionalInfoForm = ({updateIsProfessionalInfoFilled}) => {
                         <label htmlFor="tools">Technologies/Tools Expertise</label>
                         <select name="tools" id="tools" className='form-input cursor-pointer'>
                             <option value=""> select</option>
-                            {tools.map((tool) => <option value={tool}>{tool}</option>)}
+                            {tools.map((tool) => <option value={tool} key={tool}>{tool}</option>)}
                         </select>
                     </div>
 
