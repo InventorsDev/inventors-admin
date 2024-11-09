@@ -123,7 +123,7 @@ const Blogs = () => {
         if (groupedBlogs[currentPageIndex]) updateBlogsToShow(groupedBlogs[currentPageIndex]);
         updatePages(groupedBlogs);
 
-    }, [blogs])
+    }, [])
 
     const handleBlogSelection = (e, checked) => {
         const blogPost = e.target.closest(".blog-post"); // Assuming the parent element with the ID is a ".blog-post" class.
@@ -187,7 +187,7 @@ const Blogs = () => {
         <div className={`blogs-content w-full ${blogsToShow.length > 0 && "min-h-screen"} p-0 lg:p-5`}>
             <Modal hidden={deleteModalHidden}>
                 <div className='flex flex-col gap-4 items-center'>
-                    <Image src={"/images/blogs/delete-blog.svg"} width={105} height={110} />
+                    <Image src={"/images/blogs/delete-blog.svg"} alt='delete-blog-svg' width={105} height={110} />
                     <h2 className='font-extrabold text-[18px]'>Delete blogs?</h2>
                     <p className='text-gray-400 text-sm'>You&apos;re about to delete {selectedItems.length} {selectedItems.length == 1? "blog": "blogs"}</p>
                     
