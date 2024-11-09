@@ -76,36 +76,44 @@ const Blogs = () => {
     }
 
     return (
-        <div className='blogs-content w-full min-h-screen p-0 lg:p-5'>
-            <div className="search-select-delete flex w-full py-3 justify-between bg-white mb-2 px-4 rounded-xl shadow-[0px 1.41px 2.83px -0.71px #AFB6C933] lg:mb-3">
-                <input type="text" id='blog-search' className='px-4 w-full mx-2 h-fit self-center py-3 border-2 border-gray-300 rounded-xl
-                md:w-fit' placeholder='Search blog'/>
+        <div className={`blogs-content w-full ${[].length > 0 && "min-h-screen"} p-0 lg:p-5`}>
+            {[].length > 0 ?
+                <>
+                    <div className="search-select-delete flex w-full py-3 justify-between bg-white mb-2 px-4 rounded-xl shadow-[0px 1.41px 2.83px -0.71px #AFB6C933] lg:mb-3">
+                        <input type="text" id='blog-search' className='px-4 w-full mx-2 h-fit self-center py-3 border-2 border-gray-300 rounded-xl
+                        md:w-fit' placeholder='Search blog'/>
 
-                <div id="select-delete" className='bg-white p-2 gap-3 hidden md:flex lg:p-4'>
-                    <div id='selected-blogs-count' className="bg-green-100 text-sm rounded-lg p-3 text-[#00B598]">Selected ({selectedItems.length})</div>
-                    <button id='delete-selected-blogs' className='flex gap-2 items-center border-2 rounded-lg p-3 border-red-700 ease-transition hover:border-red-500'>
-                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg" className='scale-[120%]'>
-                            <path d="M5.60645 1.20312H9.60645M1.60645 3.20313H13.6064M12.2731 3.20313L11.8056 10.216C11.7354 11.2681 11.7004 11.7942 11.4731 12.1931C11.2731 12.5443 10.9713 12.8266 10.6076 13.0029C10.1944 13.2031 9.66718 13.2031 8.61268 13.2031H6.60022C5.54572 13.2031 5.01847 13.2031 4.60534 13.0029C4.24162 12.8266 3.93984 12.5443 3.73977 12.1931C3.51252 11.7942 3.47745 11.2681 3.4073 10.216L2.93978 3.20313M6.27311 6.20313V9.53646M8.93978 6.20313V9.53646" stroke="#AA0010" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        <span className='text-red-700 text-sm'>Delete ({selectedItems.length})</span>
-                    </button>
-                </div>
-            </div>
+                        <div id="select-delete" className='bg-white p-2 gap-3 hidden md:flex lg:p-4'>
+                            <div id='selected-blogs-count' className="bg-green-100 text-sm rounded-lg p-3 text-[#00B598]">Selected ({selectedItems.length})</div>
+                            <button id='delete-selected-blogs' className='flex gap-2 items-center border-2 rounded-lg p-3 border-red-700 ease-transition hover:border-red-500'>
+                                <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg" className='scale-[120%]'>
+                                    <path d="M5.60645 1.20312H9.60645M1.60645 3.20313H13.6064M12.2731 3.20313L11.8056 10.216C11.7354 11.2681 11.7004 11.7942 11.4731 12.1931C11.2731 12.5443 10.9713 12.8266 10.6076 13.0029C10.1944 13.2031 9.66718 13.2031 8.61268 13.2031H6.60022C5.54572 13.2031 5.01847 13.2031 4.60534 13.0029C4.24162 12.8266 3.93984 12.5443 3.73977 12.1931C3.51252 11.7942 3.47745 11.2681 3.4073 10.216L2.93978 3.20313M6.27311 6.20313V9.53646M8.93978 6.20313V9.53646" stroke="#AA0010" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                <span className='text-red-700 text-sm'>Delete ({selectedItems.length})</span>
+                            </button>
+                        </div>
+                    </div>
 
-            <div className="flex flex-col justify-between gap-5 py-2 md:grid md:grid-cols-2 lg:grid-cols-3">
-                {Array.from(blogs).map((blog, index) => 
-                    <BlogItem 
-                        id={blog.id}
-                        key={index} 
-                        thumbnail={blog.image} 
-                        title={blog.title} 
-                        description={blog.description} 
-                        approved = {blog.approved} 
-                        viewCount = {blog.views} 
-                        handleCheckedState = {(e, checked) => handleBlogSelection(e, checked)} 
-                    />
-                )}
-            </div>
+                    <div className="flex flex-col justify-between gap-5 py-2 md:grid md:grid-cols-2 lg:grid-cols-3">
+                        {Array.from(blogs).map((blog, index) => 
+                            <BlogItem 
+                                id={blog.id}
+                                key={index} 
+                                thumbnail={blog.image} 
+                                title={blog.title} 
+                                description={blog.description} 
+                                approved = {blog.approved} 
+                                viewCount = {blog.views} 
+                                handleCheckedState = {(e, checked) => handleBlogSelection(e, checked)} 
+                            />
+                        )}
+                    </div>
+                </>
+            : <div id='no-blog-posts-content' className='bg-white flex flex-col rounded-lg py-5 justify-center items-center gap-3'>
+                <Image src={"/images/blogs/no-blog-posts.svg"} width={289} height={320} alt='no-blog-posts-svg'/>
+                <span className='text-sm leading-[28px] text-[#464646]'>Nothing here, create your first blog</span>
+                <button className='text-white px-4 py-3 bg-[#00B598] ease-transition hover:scale-105'>Create new</button>
+            </div>}
         </div>
     );
 }
