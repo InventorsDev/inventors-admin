@@ -6,69 +6,123 @@ import Layout from '@/layouts/main';
 import Modal from '@/components/Modal/Modal';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 
-const blogs = [
-    {
-        id: 1,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 0,
-        image: "/images/blogs/thumbnail.png",
-        approved: false
-    },
-    {
-        id: 2,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 440,
-        image: "/images/blogs/thumbnail.png",
-        approved: true
-    },
-    {
-        id: 3,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 440,
-        image: "/images/blogs/thumbnail.png",
-        approved: true
-    },
-    {
-        id: 4,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 0,
-        image: "/images/blogs/thumbnail.png",
-        approved: false
-    },
-    {
-        id: 5,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 334,
-        image: "/images/blogs/thumbnail.png",
-        approved: true
-    },
-    {
-        id: 6,
-        title: 'Getting started with Tech',
-        description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
-        views: 440,
-        image: "/images/blogs/thumbnail.png",
-        approved: true
-    }
-]
-
 const Blogs = () => {
-    const pages = [[],[],[],[],[],[]];
+    const [blogs, updateBlogs] = useState([
+        {
+            id: 1,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 0,
+            image: "/images/blogs/thumbnail.png",
+            approved: false
+        },
+        {
+            id: 2,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 440,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 3,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 440,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 4,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 0,
+            image: "/images/blogs/thumbnail.png",
+            approved: false
+        },
+        {
+            id: 5,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 334,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 6,
+            title: 'Getting started with Tech',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 980,
+            image: "/images/blogs/thumbnail.png",
+            approved: false
+        },
+        {
+            id: 7,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 0,
+            image: "/images/blogs/thumbnail.png",
+            approved: false
+        },
+        {
+            id: 8,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 440,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 9,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 440,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 10,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 0,
+            image: "/images/blogs/thumbnail.png",
+            approved: false
+        },
+        {
+            id: 11,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 334,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        },
+        {
+            id: 12,
+            title: 'Getting started with AI',
+            description: 'Use audio to have live conversations with other collaborators directly in your Figma and FigJam.',
+            views: 440,
+            image: "/images/blogs/thumbnail.png",
+            approved: true
+        }
+    ]);
+    const [pages, updatePages] = useState([]);
+    const [blogsToShow, updateBlogsToShow] = useState([]);
 
     const [selectedItems, updateSelectedItems] = useState([]);
     const [deleteModalHidden, updateDeleteModalHidden] = useState(true);
-    const [currentPage, updateCurrentPage] = useState(3);
+    const [currentPageIndex, updateCurrentPageIndex] = useState(0);
 
     const router = useRouter();
 
     useEffect(() => {
-        console.log(selectedItems);
-    }, [selectedItems])
+        // when blogs data arrives ...
+        const groupedBlogs = groupBlogs();
+        updateBlogsToShow(groupedBlogs);
+        updateCurrentPageIndex(0);
+        if (groupedBlogs[currentPageIndex]) updateBlogsToShow(groupedBlogs[currentPageIndex]);
+        updatePages(groupedBlogs);
+
+    }, [blogs])
 
     const handleBlogSelection = (e, checked) => {
         const blogPost = e.target.closest(".blog-post"); // Assuming the parent element with the ID is a ".blog-post" class.
@@ -91,8 +145,30 @@ const Blogs = () => {
         router.refresh();
     }
 
+    const groupBlogs = () => {
+        const grouped = [];
+        let tempArray = [];
+      
+        blogs.forEach((picture, index) => {
+          tempArray.push(picture);
+      
+          // Once we have 8 items in the tempArray, push it to the grouped array and reset
+          if (tempArray.length === 6 || index === blogs.length - 1) {
+            grouped.push(tempArray);
+            tempArray = [];
+          }
+        });
+      
+        return grouped;
+    };
+
+    const changePage = (currentIndex) => {
+        updateCurrentPageIndex(currentIndex);
+        console.log(currentPageIndex);
+    }
+
     return (
-        <div className={`blogs-content w-full ${blogs.length > 0 && "min-h-screen"} p-0 lg:p-5`}>
+        <div className={`blogs-content w-full ${blogsToShow.length > 0 && "min-h-screen"} p-0 lg:p-5`}>
             <Modal hidden={deleteModalHidden}>
                 <div className='flex flex-col gap-4 items-center'>
                     <Image src={"/images/blogs/delete-blog.svg"} width={105} height={110} />
@@ -117,7 +193,7 @@ const Blogs = () => {
             </Modal>
 
             {/* Show blog posts only when the list is not empty */}
-            {blogs.length > 0 ?
+            {blogsToShow.length > 0 ?
                 <>
                     <div className="search-select-delete flex w-full py-3 justify-between bg-white mb-2 px-4 rounded-xl shadow-[0px 1.41px 2.83px -0.71px #AFB6C933] lg:mb-3">
                         <input type="text" id='blog-search' className='px-4 w-full mx-2 h-fit self-center py-3 border-2 border-gray-300 rounded-xl
@@ -140,7 +216,7 @@ const Blogs = () => {
                     </div>
 
                     <div className="flex flex-col justify-between gap-5 py-2 md:grid md:grid-cols-2 lg:grid-cols-3">
-                        {Array.from(blogs).map((blog, index) => 
+                        {Array.from(pages[currentPageIndex]).map((blog, index) => 
                             <BlogItem 
                                 id={blog.id}
                                 key={index} 
@@ -155,21 +231,32 @@ const Blogs = () => {
                     </div>
 
                     <div id="pages" className='flex p-6 py-4 mt-4 gap-4 items-center justify-end rounded-2xl bg-white'> 
-                        <h3 className='text-black font-semibold'>Page 1 of {pages.length}</h3>
+                        <h3 className='text-black font-semibold'>Page {parseInt(currentPageIndex) + 1} of {(pages.length)}</h3>
                         <div className="page-list flex gap-2">
                             {pages.map((page, index) => (
                                 <span 
-                                    className={`text-sm px-2 py-1 leading-[21px] text-[#98A2B3] ${currentPage == (index + 1) && "active-page-number"}`}
+                                    key={index}
+                                    id={index}
+                                    className={`text-sm px-2 py-1 cursor-pointer leading-[21px] text-[#98A2B3] ${currentPageIndex == index && "active-page-number"}`}
+                                    onClick={(e) => changePage(e.target.id)}
                                 >
                                     {index + 1}
                                 </span>
                         ))}</div>
                         <div id="arrows" className='flex'>
-                            <button className={`bg-[#00B598] p-4 rounded-2xl rounded-r-none`} id='left-arrow'>
+                            <button 
+                                className={`bg-[#00B598] p-4 rounded-2xl rounded-r-none disabled:opacity-50`} 
+                                disabled={currentPageIndex == 0} id='left-arrow'
+                                onClick={() => changePage(parseInt(currentPageIndex) - 1)}
+                            >
                                 <Image src={"/images/blogs/left-arrow-icon.svg"} width={8} height={16} alt='left-arrow'/>
                             </button>
 
-                            <button className='bg-[#00B598] p-4 rounded-2xl rounded-l-none' id='right-arrow'>
+                            <button 
+                                className='bg-[#00B598] p-4 rounded-2xl rounded-l-none disabled:opacity-50' 
+                                disabled={pages.length == parseInt(currentPageIndex) + 1} id='right-arrow'
+                                onClick={() => changePage(parseInt(currentPageIndex) + 1)}
+                            >
                                 <Image src={"/images/blogs/right-arrow-icon.svg"} width={8} height={16} alt='right-arrow'/>
                             </button>
                         </div>
@@ -210,7 +297,7 @@ const BlogItem = (props) => {
                     </svg>
                     <span>Approved</span>
                 </div>
-                :<div className='pending-status rounded-3xl h-full self-end mt-5 text-red-700 p-2 px-4 bg-red-100 flex gap-2 items-center'>
+                :<div className='pending-status absolute bottom-6 rounded-3xl self-end mt-5 text-red-700 p-2 px-4 bg-red-100 flex gap-2 items-center'>
                     <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" className='scale-[120%]'>
                         <path d="M4.99967 9.88802C2.52884 9.88802 0.520508 7.87969 0.520508 5.40885C0.520508 2.93802 2.52884 0.929688 4.99967 0.929688C7.47051 0.929688 9.47884 2.93802 9.47884 5.40885C9.47884 7.87969 7.47051 9.88802 4.99967 9.88802ZM4.99967 1.55469C2.87467 1.55469 1.14551 3.28385 1.14551 5.40885C1.14551 7.53385 2.87467 9.26302 4.99967 9.26302C7.12467 9.26302 8.85384 7.53385 8.85384 5.40885C8.85384 3.28385 7.12467 1.55469 4.99967 1.55469Z" fill="#D50014"/>
                         <path d="M6.54544 7.0474C6.49128 7.0474 6.43711 7.0349 6.38711 7.00156L5.09544 6.23073C4.77461 6.03906 4.53711 5.61823 4.53711 5.2474V3.53906C4.53711 3.36823 4.67878 3.22656 4.84961 3.22656C5.02044 3.22656 5.16211 3.36823 5.16211 3.53906V5.2474C5.16211 5.3974 5.28711 5.61823 5.41628 5.69323L6.70794 6.46406C6.85794 6.55156 6.90378 6.74323 6.81628 6.89323C6.75378 6.99323 6.64961 7.0474 6.54544 7.0474Z" fill="#D50014"/>
