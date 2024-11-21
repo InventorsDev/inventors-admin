@@ -6,7 +6,8 @@ import { Icon } from "@iconify/react";
 
 import logoDark from "@/public/images/logo-dark.png";
 
-const Sidebar = () => {
+const 
+Sidebar = () => {
   const router = useRouter();
   const topMenuItems = [
     {
