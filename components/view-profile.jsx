@@ -5,11 +5,13 @@ import { Icon } from '@iconify/react';
 
 import Button from './Button';
 import SkeletonLoader from './SkeletonLoader';
+import ApprovalModal from './ApprovalModal';
 
 import { inventorsLeads } from '@/utils/leads';
 
 const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
     const [userDetails, setUserDetails] = useState();
+    const [showApprovalModal, setShowApprovalModal] = useState({state: false, isApproval: false});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,7 +21,7 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
             // simulate the fetching of the data of user
             setTimeout(() => {
                 setLoading(false);
-            }, 3000);
+            }, 2000);
     
             // fetch user specific data
             const user = inventorsLeads.find(lead => lead.id == idOfLeadToShow);
@@ -30,30 +32,48 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
 
     return (
         <div id="view-user-profile" className={`${show? "show-profile-slider": "remove-profile-slide"} fixed z-[50] top-0 left-0 w-full h-full`}>
+            {showApprovalModal.state && 
+                <ApprovalModal 
+                    handleCloseApprovalModal={() => setShowApprovalModal({state: false, isApproval: false})} 
+                    isApproval={showApprovalModal.isApproval} userName={userDetails?.name?.split(" ")[0]}
+                />
+            }
             <div id="backdrop" onClick={() => handleCloseProfile()} className='w-full h-full absolute backdrop-brightness-[.2] z-50 cursor-pointer top-0 left-0'></div>
 
             <div id="profile-content" className={`${show? "show-profile-slide": "remove-profile-slide"} translate-x-[-100%] w-[55%] p-5 py-0 absolute z-[100] h-full top-0 left-[45%] bg-white`}> 
-                <div id="x-button" className='w-full flex py-1 cursor-pointer justify-end' onClick={() => handleCloseProfile()}>
+                <div id="x-button" 
+                    className={`w-full flex py-2 cursor-pointer justify-end ${(userDetails?.status == "Approved" || userDetails?.status == "Declined") && "py-6"}`} 
+                    onClick={() => handleCloseProfile()}
+                >
                     <Icon icon="heroicons:x-mark-16-solid" 
                         className='rounded-full border-2 border-black' width="24" height="24"
                     ></Icon>
                 </div>
 
                 <div className='bg-green-100 p-4 space-y-3'>
-                    <div id="decline-approve" className='w-full flex gap-2 justify-end'>
-                        <Button dangerButton className={'flex gap-2 py-2 bg-red-100'}>
-                            <Icon icon="heroicons:x-mark-16-solid" 
-                                className='rounded-full border-2 border-red-700' width="24" height="24"
-                            ></Icon>
-                            <p>Decline</p>
-                        </Button>
-                        <Button primaryButton className={"flex py-2 gap-2"}>
-                            <Icon icon="icon-park-outline:success" 
-                                className='' width="24" height="24"
-                            ></Icon>
-                            <p>Approve</p>
-                        </Button>
-                    </div>
+                    {/* Only Get the chance to decline or approve if user's status is neither   */}
+                    {!(userDetails?.status == "Approved" || userDetails?.status == "Declined") && 
+                        <div id="decline-approve" className='w-full flex gap-2 justify-end'>
+                            <Button 
+                                dangerButton buttonProps={{onClick: () => setShowApprovalModal({state: true, isApproval: false})}}
+                                className={'flex gap-2 py-2 bg-red-100'}
+                            >
+                                <Icon icon="heroicons:x-mark-16-solid" 
+                                    className='rounded-full border-2 border-red-700' width="24" height="24"
+                                ></Icon>
+                                <p>Decline</p>
+                            </Button>
+                            <Button 
+                                primaryButton 
+                                className={"flex py-2 gap-2"} buttonProps={{onClick: () => setShowApprovalModal({state: true, isApproval: true})}}
+                            >
+                                <Icon icon="icon-park-outline:success" 
+                                    className='' width="24" height="24"
+                                ></Icon>
+                                <p>Approve</p>
+                            </Button>
+                        </div>
+                    }
 
                     {!loading? <div className="w-full flex gap-4 bg-white p-5 py-3 rounded-lg">
                         <Image

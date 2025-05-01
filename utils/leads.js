@@ -46,7 +46,7 @@ export const inventorsLeads = [
 		linkedin: 'https://linkedin.com/in/kkehinde',
 		facebook: 'https://facebook.com/kkehinde',
 	  },
-	  status: 'Approved',
+	  status: 'Unapproved',
 	  alumni: true,
 	},
 	{
