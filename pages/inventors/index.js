@@ -30,6 +30,7 @@ const Inventors = () => {
 	const [leadsPerPage, setLeadsPerPage] = useState(5);
 
 	const [showUserProfile, setShowUserProfile] = useState(false);
+	const [idOfLeadToShow, setIdOfLeadToShow] = useState(null);
 
 	const indexOfLastLead = currentPage * leadsPerPage;
 	const indexOfFirstLead = indexOfLastLead - leadsPerPage;
@@ -114,7 +115,7 @@ const Inventors = () => {
 	return (
 		<>
 			{/* View User Profile Slider */}
-			<ViewProfile show={showUserProfile} handleCloseProfile={() => setShowUserProfile(false)} />
+			<ViewProfile show={showUserProfile} idOfLeadToShow={idOfLeadToShow} handleCloseProfile={() => setShowUserProfile(false)} />
 			
 			{/* Search */}
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">
@@ -312,7 +313,7 @@ const Inventors = () => {
 											<Icon
 												icon="ph:eye"
 												className="text-[#909090] text-lg cursor-pointer"
-												onClick={() => setShowUserProfile(true)}
+												onClick={() => {setShowUserProfile(true); setIdOfLeadToShow(lead.id)}}
 											/>
 										</td>
 									</tr>
