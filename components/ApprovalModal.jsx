@@ -21,7 +21,7 @@ const ApprovalModal = ({ isApproval, userName, picture, handleCloseApprovalModal
                 <h1 className='text-gray-700 font-bold w-fit text-center sm:text-xl'>Are you sure you want to {`${isApproval? "approve": "decline"}`} this application?</h1>
                 <p className='text-sm text-gray-400'>You&apos;re about to {`${isApproval? "approve": "decline"}`} {userName}</p>
 
-                <div className='flex gap-2 items-center w-full'>
+                <div className='flex gap-2 text-sm flex-col xs:flex-row xs:text-base items-center w-full'>
                     <Button buttonProps={{
                         onClick: () => handleCloseApprovalModal()
                     }} className="hover:bg-gray-200 w-full">Cancel</Button>

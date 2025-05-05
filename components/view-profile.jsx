@@ -38,9 +38,9 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
                     isApproval={showApprovalModal.isApproval} userName={userDetails?.name?.split(" ")[0]}
                 />
             }
-            <div id="backdrop" onClick={() => handleCloseProfile()} className='w-full h-full absolute backdrop-brightness-[.2] z-50 cursor-pointer top-0 left-0'></div>
+            <div id="backdrop" onClick={() => handleCloseProfile()} className='hidden sm:block w-full h-full absolute backdrop-brightness-[.2] z-50 cursor-pointer top-0 left-0'></div>
 
-            <div id="profile-content" className={`${show? "show-profile-slide": "remove-profile-slide"} translate-x-[-100%] w-[55%] p-5 py-0 absolute z-[100] h-full top-0 left-[45%] bg-white`}> 
+            <div id="profile-content" className={`${show? "show-profile-slide": "remove-profile-slide"} overflow-y-scroll translate-x-[-100%] w-full lg:w-[55%] p-2 sm:p-5 py-0 absolute z-[100] h-full top-0 left-0 lg:left-[45%] bg-white`}> 
                 <div id="x-button" 
                     className={`w-full flex py-2 cursor-pointer justify-end ${(userDetails?.status == "Approved" || userDetails?.status == "Declined") && "py-6"}`} 
                     onClick={() => handleCloseProfile()}
@@ -75,21 +75,21 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
                         </div>
                     }
 
-                    {!loading? <div className="w-full flex gap-4 bg-white p-5 py-3 rounded-lg">
+                    {!loading? <div className="w-full flex flex-col sm:flex-row gap-4 bg-white p-5 py-3 rounded-lg">
                         <Image
                             src="/images/profile-image.png"
                             alt="Figma Icon"
                             width={160}
                             height={167}
-                            className=" rounded-full"
+                            className=" rounded-full self-center sm:self-start max-h-fit"
                         />
 
                         <div id="overview-text" className='space-y-1 text-sm'>
                             <h1 className="font-bold text-lg p-2">{userDetails.name} <span className='text-sm px-2 italic font-normal text-gray-600'>
                                 {userDetails.position} <span className='text-[#00B598]'>@{userDetails.company}</span></span>
                             </h1>
-                            <div className='flex gap-2 italic'>
-                                <div className='border-r border-gray-400 p-2 space-y-1'>
+                            <div className='flex flex-col md:flex-row gap-2 italic'>
+                                <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1'>
                                     <p className='text-gray-400'>Email: <span className='text-gray-600 px-2'>{userDetails.email}</span></p>
                                     <p className='text-gray-400'>Phone: <span className="text-gray-600 px-2">{userDetails.phone}</span></p>
                                     <p className='text-gray-400'>Location: <span className="text-gray-600 px-2">{userDetails.location}.</span></p>
@@ -105,15 +105,15 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
 
                     </div>: <SkeletonLoader isOverviewText />}
 
-                    <div id="description-technologies" className='p-5 py-3 bg-white flex w-full gap-2 rounded-lg'>
-                        <div id="description" className='space-y-2 border-r basis-[50%] pr-4 border-gray-400'>
+                    <div id="description-technologies" className='p-5 py-3 bg-white flex flex-col md:flex-row w-full gap-4 md:gap-2 rounded-lg'>
+                        <div id="description" className='space-y-2 border-b pb-4 md:border-b-0 md:pb-0 md:border-r basis-[50%] pr-4 border-gray-400'>
                             <h1 className='font-bold'>BIO/SHORT DESCRIPTION</h1>
 
                             {!loading ? <p className="text-sm text-gray-400">
                                 {userDetails.bio}
                             </p>: <SkeletonLoader isDescription />}
                         </div>
-                        <div id="technologies" className='space-y-2 basis-[50%] px-10'>
+                        <div id="technologies" className='space-y-2 basis-[50%] md:px-10'>
                             <h1 className='font-bold'>TECHNOLOGIES/TOOLS</h1>
                             
                             {!loading? <div className='flex gap-4 flex-wrap'>
@@ -128,18 +128,31 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
                         <h1 className='font-bold'>CONTACT INFO</h1>
 
                         {!loading ? 
-                        (<><div className='flex gap-2 italic w-full text-sm'>
-                                <div className='border-r border-gray-400 p-2 space-y-1 basis-[50%]'>
-                                    <p className='text-gray-400'>Skill Profile URL: <span className='text-gray-600 px-2'>{userDetails.links.profile}</span></p>
-                                    <p className='text-gray-400'>X (Twitter): <span className="text-gray-600 px-2">{userDetails.links.twitter}</span> </p>
+                        (<><div className='flex flex-col md:flex-row gap-2 italic w-full text-sm'>
+                                <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1 basis-[50%]'>
+                                    <p className='text-gray-400 xs:flex'>
+                                        <p>Skill Profile URL: </p>
+                                        <Link href={userDetails.links.profile} className='text-gray-600 text-xs xs:text-sm px-2'>{userDetails.links.profile}</Link>
+                                    </p>
+                                    <p className='text-gray-400 xs:flex'>
+                                        <p>X (Twitter):</p> 
+                                        <Link href={userDetails.links.twitter} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.twitter}</Link> 
+                                    </p>
                                 </div>
                                 <div className='border-gray-400 p-2 space-y-1 basis-[50%]'>
-                                    <p className='text-gray-400'>LinkedIn: <span className="text-gray-600 px-2">{userDetails.links.linkedin}</span></p>
-                                    <p className='text-gray-400'>Facebook: <span className="text-gray-600 px-2">{userDetails.links.facebook}</span> </p>
+                                    <p className='text-gray-400 xs:flex'>
+                                        <p>LinkedIn:</p>
+                                        <Link href={userDetails.links.linkedin} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.linkedin}</Link>
+                                    </p>
+                                    <p className='text-gray-400 xs:flex'>
+                                        <p>Facebook:</p> 
+                                        <Link href={userDetails.links.facebook} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.facebook}</Link> 
+                                    </p>
                                 </div>
                             </div>
-                            <p className='text-gray-400 text-sm px-2'>Personal Website (portfolio): 
-                                <Link href={userDetails.links.portfolio} className="text-gray-600 px-2">{userDetails.links.portfolio}</Link>
+                            <p className='text-gray-400 text-sm px-2 xs:flex'>
+                                <p>Personal Website (portfolio):</p> 
+                                <Link href={userDetails.links.portfolio} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.portfolio}</Link>
                             </p>
                         </>): <SkeletonLoader />}
                     </div>
