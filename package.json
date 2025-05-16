@@ -14,7 +14,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@iconify/react": "^5.0.2",
+    "@iconify/react": "^5.2.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "postcss": "^8",

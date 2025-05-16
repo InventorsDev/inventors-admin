@@ -15,6 +15,9 @@ module.exports = {
         darkGray: "var(--dark-gray)",
         lightGray: "var(--light-gray)",
       },
+      screens: {
+        "xs": "450px"
+      }
     },
   },
   plugins: [],

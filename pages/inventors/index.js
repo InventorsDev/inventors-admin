@@ -5,6 +5,7 @@ import Layout from '@/layouts/main';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Button from '@/components/Button';
+import ViewProfile from '@/components/view-profile';
 
 import { inventorsLeads } from '@/utils/leads';
 import { shortenEmail, shortenPhone } from '@/utils/helpers';
@@ -27,6 +28,9 @@ const Inventors = () => {
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [leadsPerPage, setLeadsPerPage] = useState(5);
+
+	const [showUserProfile, setShowUserProfile] = useState(false);
+	const [idOfLeadToShow, setIdOfLeadToShow] = useState(null);
 
 	const indexOfLastLead = currentPage * leadsPerPage;
 	const indexOfFirstLead = indexOfLastLead - leadsPerPage;
@@ -110,6 +114,9 @@ const Inventors = () => {
 
 	return (
 		<>
+			{/* View User Profile Slider */}
+			<ViewProfile show={showUserProfile} idOfLeadToShow={idOfLeadToShow} handleCloseProfile={() => setShowUserProfile(false)} />
+			
 			{/* Search */}
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">
 				<input
@@ -306,6 +313,7 @@ const Inventors = () => {
 											<Icon
 												icon="ph:eye"
 												className="text-[#909090] text-lg cursor-pointer"
+												onClick={() => {setShowUserProfile(true); setIdOfLeadToShow(lead.id)}}
 											/>
 										</td>
 									</tr>

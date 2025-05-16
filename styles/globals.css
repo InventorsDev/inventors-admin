@@ -60,3 +60,11 @@
 .form-input:focus {
   @apply outline-primaryGreen
 }
+
+.show-profile-slide {
+  @apply transition-all translate-x-[0%] duration-300 ease-out;
+}
+
+.remove-profile-slide {
+  @apply transition-all translate-x-[100%] duration-300 ease-out;
+}
