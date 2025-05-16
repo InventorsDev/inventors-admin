@@ -97,7 +97,7 @@ export default function SignIn() {
 								Forgot Password?
 							</p>
 						</div>
-						<div className="flex items-center">
+						{/* <div className="flex items-center">
 							<input
 								type="checkbox"
 								className="h-4 w-4 text-teal-600"
@@ -107,7 +107,7 @@ export default function SignIn() {
 							<label htmlFor="keep-logged-in" className="ml-2 text-sm">
 								Keep me logged in
 							</label>
-						</div>
+						</div> */}
 						<button
 							type="submit"
 							className="w-full p-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-200"

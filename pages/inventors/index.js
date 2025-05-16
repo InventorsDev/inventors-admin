@@ -115,8 +115,12 @@ const Inventors = () => {
 	return (
 		<>
 			{/* View User Profile Slider */}
-			<ViewProfile show={showUserProfile} idOfLeadToShow={idOfLeadToShow} handleCloseProfile={() => setShowUserProfile(false)} />
-			
+			<ViewProfile
+				show={showUserProfile}
+				idOfLeadToShow={idOfLeadToShow}
+				handleCloseProfile={() => setShowUserProfile(false)}
+			/>
+
 			{/* Search */}
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">
 				<input
@@ -149,15 +153,15 @@ const Inventors = () => {
 							primaryButton
 							className={`flex items-center gap-3`}
 							buttonProps={{
-								onClick: () => router.push('/inventors/add-new'),
+								onClick: () => router.push('/inventors/invite'),
 							}}
 						>
 							<Icon icon="tabler:users" className="text-lg" />
-							Add new
-							<Icon
+							Invite Lead
+							{/* <Icon
 								icon="solar:alt-arrow-down-line-duotone"
 								className="text-lg"
-							/>
+							/> */}
 						</Button>
 					)}
 				</div>
@@ -313,7 +317,10 @@ const Inventors = () => {
 											<Icon
 												icon="ph:eye"
 												className="text-[#909090] text-lg cursor-pointer"
-												onClick={() => {setShowUserProfile(true); setIdOfLeadToShow(lead.id)}}
+												onClick={() => {
+													setShowUserProfile(true);
+													setIdOfLeadToShow(lead.id);
+												}}
 											/>
 										</td>
 									</tr>

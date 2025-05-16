@@ -12,7 +12,7 @@ import ProfessionalInfoForm from '@/components/AddInventors/ProfessionalInfoForm
 import ContactInfoForm from '@/components/AddInventors/ContactInfoForm';
 import BasicInfoForm from '@/components/AddInventors/BasicInfoForm';
 
-const AddNew = () => {
+const EditProfilePage = () => {
 	const [formData, updateFormData] = useState({
 		basicInfo: {},
 		professionalInfo: {},
@@ -166,12 +166,12 @@ const AddNew = () => {
 	);
 };
 
-export default AddNew;
-
-AddNew.getLayout = function getLayout(page) {
+EditProfilePage.getLayout = function getLayout(page) {
 	return (
-		<Layout title="Add new user" showBackButton>
+		<Layout title="Edit Profile" showBackButton>
 			{page}
 		</Layout>
 	);
 };
+
+export default EditProfilePage;

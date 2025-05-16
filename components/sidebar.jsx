@@ -30,6 +30,11 @@ const Sidebar = () => {
       icon: "solar:user-bold",
     },
     {
+      title: "Profile",
+      link: "/profile",
+      icon: "solar:user-circle-bold", // pick any icon you like
+    },
+    {
       title: "Blog",
       link: "/blog",
       icon: "tabler:rss",
@@ -66,7 +71,6 @@ const Sidebar = () => {
           </Link>
         </div>
         <div className="mt-10 pb-2 border-b border-gray-100 text-lightGray">
-          <span className="text-xs ps-4 font-medium">Panel</span>
           <ul className="mt-4 flex flex-col gap-y-2 list-none">
             {topMenuItems.map((menuItem, i) => (
               <li className="text-sm" key={i}>
