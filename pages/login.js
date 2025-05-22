@@ -1,86 +1,80 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+import Head from 'next/head';
 
 export default function SignIn() {
-	const [currentIndex, setCurrentIndex] = useState(0);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
-	const carouselItems = [
-		{
-			title: 'Create a Professional Profile',
-			description:
-				'Donec justo tortor, malesuada vitae faucibus ac, tristique sit amet massa. Aliquam dignissim nec felis quis imperdiet.',
-			imageUrl: '/images/padlock.png',
-		},
-		{
-			title: 'Explore Opportunities',
-			description:
-				'Suspendisse fermentum, lectus a ultrices sagittis, nisi ligula convallis eros, et efficitur metus nisi et felis.',
-			imageUrl: '/images/padlock.png',
-		},
-		{
-			title: 'Build Your Network',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.',
-			imageUrl: '/images/padlock.png',
-		},
-	];
 
-	const goToPrevious = () => {
-		const newIndex =
-			currentIndex === 0 ? carouselItems.length - 1 : currentIndex - 1;
-		setCurrentIndex(newIndex);
-	};
-
-	const goToNext = () => {
-		const newIndex =
-			currentIndex === carouselItems.length - 1 ? 0 : currentIndex + 1;
-		setCurrentIndex(newIndex);
-	};
-
-	const handleSignIn = (e) => {
+	const handleSignIn = async (e) => {
 		e.preventDefault();
 		if (!email || !password) {
 			setError('Email and password are required');
 			return;
 		}
-		setError('');
-		console.log('Signing in:', email, password);
+
+		try {
+			setError('');
+			const res = await fetch('/api/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email, password }),
+			});
+
+			const data = await res.json();
+			if (!res.ok) throw new Error(data.message || 'Login failed');
+
+			window.location.href = '/';
+		} catch (err) {
+			setError(err.message);
+		}
 	};
 
 	return (
-		<div className="flex items-center justify-center h-screen bg-primaryGreen">
-			<div className="bg-white rounded-xl shadow-xl w-3/4 max-w-6xl flex">
-				<div className="w-1/2 p-10 relative my-20">
-					<Image
-						src={`/images/logo-dark.png`}
-						alt="Inventors Logo"
-						width={100}
-						height={300}
-						className="pb-2 w-32 h-auto object-contain"
-					/>
+		<>
+			<Head>
+				<title>Login – Inventors</title>
+			</Head>
 
-					<h2 className="text-2xl font-bold my-4">Let's get you signed in</h2>
-					<form className="space-y-4" onSubmit={handleSignIn}>
-						{error && <p className="text-red-500 text-sm">{error}</p>}
+			<div className="min-h-screen bg-gradient-to-br from-teal-100 to-green-100 flex items-center justify-center px-4 py-12">
+				<div className="bg-white rounded-xl w-full max-w-md px-8 py-10 space-y-6">
+					<div className="flex justify-center">
+						<Image
+							src="/images/logo-dark.png"
+							alt="Inventors Logo"
+							width={120}
+							height={40}
+							className="object-contain"
+						/>
+					</div>
+
+					<h2 className="text-2xl font-bold text-center text-gray-800">
+						Sign in to Inventors
+					</h2>
+					<p className="text-center text-sm text-gray-500">
+						Access your dashboard and manage your profile.
+					</p>
+
+					<form onSubmit={handleSignIn} className="space-y-4">
+						{error && <p className="text-sm text-red-600">{error}</p>}
+
 						<div>
-							<label className="block text-sm font-medium" htmlFor="email">
-								Email Address
+							<label htmlFor="email" className="block text-sm font-medium">
+								Email
 							</label>
 							<input
 								id="email"
 								type="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								placeholder="lead@inventors.com"
-								className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-								aria-required="true"
-								aria-invalid={error ? 'true' : 'false'}
+								placeholder="you@example.com"
+								className="form-input w-full mt-1"
 							/>
 						</div>
+
 						<div>
-							<label className="block text-sm font-medium" htmlFor="password">
+							<label htmlFor="password" className="block text-sm font-medium">
 								Password
 							</label>
 							<input
@@ -88,98 +82,23 @@ export default function SignIn() {
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								placeholder="Enter your password"
-								className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
-								aria-required="true"
-								aria-invalid={error ? 'true' : 'false'}
+								placeholder="••••••••"
+								className="form-input w-full mt-1"
 							/>
-							<p className="mt-1 text-sm text-teal-600 hover:underline cursor-pointer">
-								Forgot Password?
+							<p className="text-xs text-teal-600 mt-1 hover:underline cursor-pointer">
+								Forgot password?
 							</p>
 						</div>
-						{/* <div className="flex items-center">
-							<input
-								type="checkbox"
-								className="h-4 w-4 text-teal-600"
-								style={{ accentColor: '#38b2ac' }}
-								id="keep-logged-in"
-							/>
-							<label htmlFor="keep-logged-in" className="ml-2 text-sm">
-								Keep me logged in
-							</label>
-						</div> */}
+
 						<button
 							type="submit"
-							className="w-full p-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-200"
+							className="w-full bg-primaryGreen text-white py-3 rounded-lg font-medium hover:bg-green-600 transition"
 						>
 							Sign In
 						</button>
 					</form>
-					{/* <p className="mt-4 text-sm">
-						Don't have an account yet?{' '}
-						<a href="#" className="text-teal-600 hover:underline">
-							Become a 'Lead'
-						</a>
-					</p>
-					<div className="mt-4 flex items-center">
-						<div className="border-t border-gray-300 flex-grow mr-3"></div>
-						<span className="text-sm text-gray-500">Or sign in with email</span>
-						<div className="border-t border-gray-300 flex-grow ml-3"></div>
-					</div>
-					<button className="mt-4 w-full py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center space-x-2 hover:bg-gray-100 transition duration-200">
-						<img
-							src="/images/google-icon.png"
-							alt="Google Icon"
-							className="h-5 w-5"
-						/>
-						<span>Sign in with Google</span>
-					</button> */}
-				</div>
-
-				<div className="w-1/2 p-10 bg-gray-50 flex flex-col justify-center items-center relative">
-					<div className="absolute inset-0 flex items-center justify-between px-4">
-						<button
-							onClick={goToPrevious}
-							className="text-gray-600 hover:text-teal-600 focus:outline-none"
-							aria-label="Previous"
-						>
-							&lt;
-						</button>
-						<button
-							onClick={goToNext}
-							className="text-gray-600 hover:text-teal-600 focus:outline-none"
-							aria-label="Next"
-						>
-							&gt;
-						</button>
-					</div>
-					<Image
-						src={carouselItems[currentIndex].imageUrl}
-						alt={carouselItems[currentIndex].title}
-						width={150}
-						height={150}
-						className="h-32 w-32 mb-4"
-					/>
-					<h3 className="text-xl font-semibold mb-2">
-						{carouselItems[currentIndex].title}
-					</h3>
-					<p className="text-gray-600 text-center">
-						{carouselItems[currentIndex].description}
-					</p>
-					<div className="mt-4 flex space-x-2">
-						{carouselItems.map((_, index) => (
-							<button
-								key={index}
-								onClick={() => setCurrentIndex(index)}
-								className={`h-2 w-2 rounded-full ${
-									index === currentIndex ? 'bg-teal-600' : 'bg-gray-400'
-								}`}
-								aria-label={`Slide ${index + 1}`}
-							></button>
-						))}
-					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
