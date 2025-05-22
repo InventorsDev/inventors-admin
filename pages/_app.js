@@ -1,18 +1,45 @@
-import "@/styles/globals.css";
-import { Ubuntu } from "next/font/google";
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
+import '@/styles/globals.css';
 
-const ubuntu = Ubuntu({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-});
+const PUBLIC_ROUTES = ['/login'];
 
-export default function App({ Component, pageProps }) {
-  const getLayout =
-    Component.getLayout ??
-    ((page) => <main className={ubuntu.className}>{page}</main>);
-  return (
-    <div className={ubuntu.className}>
-      {getLayout(<Component {...pageProps} />)}
-    </div>
-  );
+function GuardedRoute({ Component, pageProps }) {
+	const { user, loading } = useAuth();
+	const router = useRouter();
+	const isPublic = PUBLIC_ROUTES.includes(router.pathname);
+
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<p className="text-gray-600">Loading...</p>
+			</div>
+		);
+	}
+
+	if (!isPublic && !user) {
+		if (typeof window !== 'undefined') {
+			router.replace('/login');
+		}
+		return null;
+	}
+
+	if (isPublic && user && router.pathname === '/login') {
+		router.replace('/dashboard'); // or wherever you want to send logged-in users
+		return null;
+	}
+
+	return <Component {...pageProps} />;
 }
+
+function MyApp({ Component, pageProps }) {
+	const getLayout = Component.getLayout || ((page) => page);
+
+	return (
+		<AuthProvider>
+			{getLayout(<GuardedRoute Component={Component} pageProps={pageProps} />)}
+		</AuthProvider>
+	);
+}
+
+export default MyApp;

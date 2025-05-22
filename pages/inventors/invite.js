@@ -1,17 +1,17 @@
-// pages/inventors/invite.js
 import { useState } from 'react';
 import Layout from '@/layouts/main';
 import Button from '@/components/Button';
 import { Icon } from '@iconify/react';
+import Toast from '@/components/ui/Toast';
 
 export default function InviteLeadPage() {
 	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [message, setMessage] = useState('');
+	const [toast, setToast] = useState(null);
 
 	const handleInvite = async () => {
 		setLoading(true);
-		setMessage('');
+		setToast(null);
 
 		try {
 			const res = await fetch('/api/invite-lead', {
@@ -23,17 +23,20 @@ export default function InviteLeadPage() {
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.message || 'Something went wrong');
 
-			setMessage('Invitation sent successfully!');
+			setToast({ message: data.message, type: 'success' });
 			setEmail('');
 		} catch (err) {
-			setMessage(err.message || 'Failed to send invite.');
+			setToast({
+				message: err.message || 'Failed to send invite.',
+				type: 'error',
+			});
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	return (
-		<div className="bg-white p-6 rounded-xl max-w-xl mx-auto">
+		<div className="bg-white p-6 rounded-xl max-w-xl mx-auto relative">
 			<h1 className="text-2xl font-semibold mb-4">Invite a New Lead</h1>
 
 			<label className="block text-sm mb-2">Lead's Email Address</label>
@@ -44,16 +47,6 @@ export default function InviteLeadPage() {
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}
 			/>
-
-			{message && (
-				<p
-					className={`text-sm mb-4 ${
-						message.includes('success') ? 'text-green-600' : 'text-red-600'
-					}`}
-				>
-					{message}
-				</p>
-			)}
 
 			<Button
 				primaryButton
@@ -72,6 +65,14 @@ export default function InviteLeadPage() {
 					</>
 				)}
 			</Button>
+
+			{toast && (
+				<Toast
+					message={toast.message}
+					type={toast.type}
+					onClose={() => setToast(null)}
+				/>
+			)}
 		</div>
 	);
 }
