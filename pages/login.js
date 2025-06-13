@@ -2,13 +2,20 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 
+import Spinner from '@/components/Spinner';
+
 export default function SignIn() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [loginLoading, setLoginLoading] = useState(false);
 	const [error, setError] = useState('');
 
 	const handleSignIn = async (e) => {
 		e.preventDefault();
+
+		// initialize loading state
+		setLoginLoading(true);
+
 		if (!email || !password) {
 			setError('Email and password are required');
 			return;
@@ -28,6 +35,8 @@ export default function SignIn() {
 			window.location.href = '/';
 		} catch (err) {
 			setError(err.message);
+		} finally {
+			setLoginLoading(false);
 		}
 	};
 
@@ -92,9 +101,10 @@ export default function SignIn() {
 
 						<button
 							type="submit"
-							className="w-full bg-primaryGreen text-white py-3 rounded-lg font-medium hover:bg-green-600 transition"
+							className="w-full bg-primaryGreen text-white py-3 rounded-lg font-medium hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+							disabled={loginLoading}
 						>
-							Sign In
+							{loginLoading? <Spinner /> : "Sign In"}
 						</button>
 					</form>
 				</div>
