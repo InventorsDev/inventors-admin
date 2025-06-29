@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Icon } from '@iconify/react';
-
 import Button from './Button';
 import SkeletonLoader from './SkeletonLoader';
 import ApprovalModal from './ApprovalModal';
+import Drawer from './Drawer';
+import { Icon } from '@iconify/react';
 
 import { inventorsLeads } from '@/utils/leads';
 
-const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
+const ViewProfile = ({ show, idOfLeadToShow, handleCloseProfile }) => {
     const [userDetails, setUserDetails] = useState();
     const [showApprovalModal, setShowApprovalModal] = useState({state: false, isApproval: false});
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (show) {
             setLoading(true);
 
@@ -26,31 +26,25 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
             // fetch user specific data
             const user = inventorsLeads.find(lead => lead.id == idOfLeadToShow);
             setUserDetails(user);
-
         }
     }, [show]);
 
     return (
-        <div id="view-user-profile" className={`${show? "show-profile-slider": "remove-profile-slide"} fixed z-[50] top-0 left-0 w-full h-full`}>
+        <React.Fragment>
             {showApprovalModal.state && 
                 <ApprovalModal 
                     handleCloseApprovalModal={() => setShowApprovalModal({state: false, isApproval: false})} 
                     isApproval={showApprovalModal.isApproval} userName={userDetails?.name?.split(" ")[0]}
                 />
             }
-            <div id="backdrop" onClick={() => handleCloseProfile()} className='hidden sm:block w-full h-full absolute backdrop-brightness-[.2] z-50 cursor-pointer top-0 left-0'></div>
+            
+            <Drawer 
+                show={show}
+                userDetails={userDetails}
+                handleClose={() => handleCloseProfile()}
+            >
 
-            <div id="profile-content" className={`${show? "show-profile-slide": "remove-profile-slide"} overflow-y-scroll translate-x-[-100%] w-full lg:w-[55%] p-2 sm:p-5 py-0 absolute z-[100] h-full top-0 left-0 lg:left-[45%] bg-white`}> 
-                <div id="x-button" 
-                    className={`w-full flex py-2 cursor-pointer justify-end ${(userDetails?.status == "Approved" || userDetails?.status == "Declined") && "py-6"}`} 
-                    onClick={() => handleCloseProfile()}
-                >
-                    <Icon icon="heroicons:x-mark-16-solid" 
-                        className='rounded-full border-2 border-black' width="24" height="24"
-                    ></Icon>
-                </div>
-
-                <div className='bg-green-100 p-4 space-y-3'>
+                <div id='content' className='bg-green-100 p-4 space-y-3'>
                     {/* Only Get the chance to decline or approve if user's status is neither   */}
                     {!(userDetails?.status == "Approved" || userDetails?.status == "Declined") && 
                         <div id="decline-approve" className='w-full flex gap-2 justify-end'>
@@ -156,9 +150,9 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
                             </p>
                         </>): <SkeletonLoader />}
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>  
+            </Drawer>
+        </React.Fragment>
     );
 }
 
