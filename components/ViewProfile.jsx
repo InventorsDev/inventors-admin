@@ -44,7 +44,7 @@ const ViewProfile = ({ show, idOfLeadToShow, handleCloseProfile }) => {
                 handleClose={() => handleCloseProfile()}
             >
 
-                <div id='content' className='bg-green-100 p-4 space-y-3'>
+                <div id='content' className='bg-[var(--mint-green)] p-4 space-y-3'>
                     {/* Only Get the chance to decline or approve if user's status is neither   */}
                     {!(userDetails?.status == "Approved" || userDetails?.status == "Declined") && 
                         <div id="decline-approve" className='w-full flex gap-2 justify-end'>
@@ -80,7 +80,7 @@ const ViewProfile = ({ show, idOfLeadToShow, handleCloseProfile }) => {
 
                         <div id="overview-text" className='space-y-1 text-sm'>
                             <h1 className="font-bold text-lg p-2">{userDetails.name} <span className='text-sm px-2 italic font-normal text-gray-600'>
-                                {userDetails.position} <span className='text-[#00B598]'>@{userDetails.company}</span></span>
+                                {userDetails.position} <span className='text-[var(--mint-green)]'>@{userDetails.company}</span></span>
                             </h1>
                             <div className='flex flex-col md:flex-row gap-2 italic'>
                                 <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1'>

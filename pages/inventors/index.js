@@ -6,6 +6,8 @@ import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import ViewProfile from '@/components/ViewProfile';
+// import ViewEvent from '@/components/ViewEvent';
+import EditEvent from '@/components/EditEvent';
 
 import { inventorsLeads } from '@/utils/leads';
 import { shortenEmail, shortenPhone } from '@/utils/helpers';
@@ -115,10 +117,9 @@ const Inventors = () => {
 	return (
 		<>
 			{/* View User Profile Slider */}
-			<ViewProfile
+			<EditEvent
 				show={showUserProfile}
-				idOfLeadToShow={idOfLeadToShow}
-				handleCloseProfile={() => setShowUserProfile(false)}
+				handleCloseEvent={() => setShowUserProfile(false)}
 			/>
 
 			{/* Search */}
