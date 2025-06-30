@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+// import { useSearchParams } from 'next/navigation';
 import Layout from '@/layouts/main';
 
 import { Icon } from '@iconify/react';
@@ -7,7 +8,7 @@ import Image from 'next/image';
 import Button from '@/components/Button';
 import ViewProfile from '@/components/ViewProfile';
 // import ViewEvent from '@/components/ViewEvent';
-import EditEvent from '@/components/EditEvent';
+// import EditEvent from '@/components/EditEvent';
 
 import { inventorsLeads } from '@/utils/leads';
 import { shortenEmail, shortenPhone } from '@/utils/helpers';
@@ -22,6 +23,8 @@ const tabs = [
 
 const Inventors = () => {
 	const router = useRouter();
+	// const searchParams = useSearchParams();
+	// const view = searchParams.get("view")
 
 	const [selectedLeads, setSelectedLeads] = useState([]);
 	const [searchText, setSearchText] = useState('');
@@ -117,10 +120,22 @@ const Inventors = () => {
 	return (
 		<>
 			{/* View User Profile Slider */}
-			<EditEvent
+			<ViewProfile 
 				show={showUserProfile}
-				handleCloseEvent={() => setShowUserProfile(false)}
+				idOfLeadToShow={idOfLeadToShow}
+				handleCloseProfile={() => setShowUserProfile(false)}
 			/>
+
+			{/* {view == "edit" ? 
+				<EditEvent 
+					show={showUserProfile}
+					handleCloseEvent={() => setShowUserProfile(false)}
+				/>
+				: <ViewEvent
+					show={showUserProfile}
+					handleCloseEvent={() => setShowUserProfile(false)}
+				/>
+			} */}
 
 			{/* Search */}
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">

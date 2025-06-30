@@ -125,27 +125,27 @@ const ViewProfile = ({ show, idOfLeadToShow, handleCloseProfile }) => {
                         (<><div className='flex flex-col md:flex-row gap-2 italic w-full text-sm'>
                                 <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1 basis-[50%]'>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>Skill Profile URL: </p>
+                                        <span>Skill Profile URL: </span>
                                         <Link href={userDetails.links.profile} className='text-gray-600 text-xs xs:text-sm px-2'>{userDetails.links.profile}</Link>
                                     </p>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>X (Twitter):</p> 
+                                        <span>X (Twitter):</span> 
                                         <Link href={userDetails.links.twitter} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.twitter}</Link> 
                                     </p>
                                 </div>
                                 <div className='border-gray-400 p-2 space-y-1 basis-[50%]'>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>LinkedIn:</p>
+                                        <span>LinkedIn:</span>
                                         <Link href={userDetails.links.linkedin} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.linkedin}</Link>
                                     </p>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>Facebook:</p> 
+                                        <span>Facebook:</span> 
                                         <Link href={userDetails.links.facebook} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.facebook}</Link> 
                                     </p>
                                 </div>
                             </div>
                             <p className='text-gray-400 text-sm px-2 xs:flex'>
-                                <p>Personal Website (portfolio):</p> 
+                                <span>Personal Website (portfolio):</span> 
                                 <Link href={userDetails.links.portfolio} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.portfolio}</Link>
                             </p>
                         </>): <SkeletonLoader />}

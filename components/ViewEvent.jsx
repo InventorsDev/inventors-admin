@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
+import Router from 'next/navigation';
 import Image from 'next/image';
 import Button from './Button';
 import SkeletonLoader from './SkeletonLoader';
@@ -6,9 +7,12 @@ import Drawer from './Drawer';
 import { Icon } from '@iconify/react';
 
 import { eventDetails } from '@/utils/event';
+import { useRouter } from 'next/router';
 
 const ViewEvent = ({ show, handleCloseEvent }) => {
     const [loading, setLoading] = useState(true);
+
+    const router = useRouter();
 
     useLayoutEffect(() => {
         if (show) {
@@ -40,7 +44,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                     {eventDetails.status.toLowerCase() == "approved"? 
                         <>
                             <Button 
-                                buttonProps={{onClick: () => console.log("Edit Event")}}
+                                buttonProps={{onClick: () => router.push("?view=edit")}}
                                 className={'flex gap-2 items-center text-gray-500 border-gray-500'}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -61,7 +65,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                         </>
                         : <>
                             <Button 
-                                dangerButton buttonProps={{onClick: () => setShowApprovalModal({state: true, isApproval: false})}}
+                                dangerButton buttonProps={{onClick: () => console.log("Decline")}}
                                 className={'flex gap-2 items-center py-1 bg-red-100'}
                             >
                                 <Icon icon="heroicons:x-mark-16-solid" 
@@ -71,7 +75,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                             </Button>
                             <Button 
                                 primaryButton 
-                                className={"flex items-center py-1 gap-2"} buttonProps={{onClick: () => setShowApprovalModal({state: true, isApproval: true})}}
+                                className={"flex items-center py-1 gap-2"} buttonProps={{onClick: () => console.log("Approval")}}
                             >
                                 <Icon icon="icon-park-outline:success" 
                                     className='' width="24" height="24"
@@ -88,7 +92,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                             alt="Event Flyer"
                             width={160}
                             height={127}
-                            className=" rounded-2xl self-center sm:self-start"
+                            className=" rounded-lg self-center sm:self-start"
                         />
 
                         <div id="overview-text" className='space-y-4 font-semibold text-gray-500  text-sm'>
@@ -99,6 +103,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                         src={"/images/events/status.svg"}
                                         height={24}
                                         width={24}
+                                        alt='status'
                                     />
 
                                     <p>Status:</p>   
@@ -108,12 +113,13 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                 </span>
                             </div>
 
-                            <div className="date flex items-center gap-4">
+                            <div className="date flex flex-col items-start sm:flex-row sm:items-center gap-4">
                                 <label htmlFor="date" className='flex text-gray-600 gap-2 items-center'>
                                     <Image 
                                         src={"/images/events/date.svg"}
                                         height={24}
                                         width={24}
+                                        alt='date-icon'
                                     />
 
                                     <p>Date:</p>   
@@ -125,25 +131,27 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                             src={"/images/events/calender.svg"}
                                             height={24}
                                             width={24}
+                                            alt='time-icon'
                                         />
                                         <p>{eventDetails.time.start} - {eventDetails.time.end}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="assignee flex items-center gap-2">
+                            <div className="assignee flex items-center flex-wrap gap-2">
                                 <label htmlFor="assignees" className='flex text-gray-600 gap-2 items-center'>
                                     <Image 
                                         src={"/images/events/assignee.svg"}
                                         height={24}
                                         width={24}
+                                        alt='assignee-icon'
                                     />
 
                                     <p>Assignee:</p>   
                                 </label>
                                 <div id='assignees' className='flex items-center gap-2'>
                                     {eventDetails.assignees.map((assignee, index) => (
-                                        <div id='assignee' key={index} className='rounded-2xl bg-[--mint-green] text-gray-500 flex items-center'>
+                                        <div id='assignee' key={index} className='rounded-2xl italic bg-[--mint-green] text-gray-500 flex items-center'>
                                             <Image 
                                                 src={assignee.profile}
                                                 height={24}
@@ -151,7 +159,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                                 className='rounded-full'
                                                 alt='Assignee Profile Picture'
                                             />
-                                            <p className='p-1 px-2'>{assignee.name}</p>
+                                            <p className='p-1 px-2 text-sm sm:text-base'>{assignee.name}</p>
                                         </div>
                                     ))}
                                     <button className='text-white p-1 rounded-full bg-[var(--primary-green)]'>
@@ -166,6 +174,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                         src={"/images/events/location.svg"}
                                         height={24}
                                         width={24}
+                                        alt='location-icon'
                                     />
 
                                     <p>Location:</p>   
@@ -178,6 +187,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                             src={"/images/events/copy.svg"}
                                             height={24}
                                             width={24}
+                                            alt='copy-icon'
                                         />
                                         <p>Copy Link</p>
                                     </button>
@@ -203,13 +213,14 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                     src={"/images/events/download.svg"}
                                     height={24}
                                     width={24}
+                                    alt='download-icon'
                                 />
                                 <p>Download all</p>
                             </button>
                         </header>
 
                         {!loading ? (
-                            <div id='attachments-listing' className='flex gap-4'>
+                            <div id='attachments-listing' className='flex flex-col md:flex-row gap-4'>
                                 {eventDetails.attachments.map((attachment, index) => (
                                     <div id="attachment" key={index} className='flex gap-2 p-2 rounded-md border-2 border-gray-200'>
                                         <Image 
@@ -222,7 +233,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                         <div id="text" className='space-y-2'>
                                             <h3 className='font-semibold text-gray-600'>{attachment.filename}</h3>
                                             <div className='text-gray-400 font-semibold'>
-                                                {attachment.size}  •  <button className='font-normal text-[var(--primary-green)]'>Download</button>
+                                                {attachment.size}
                                             </div>
                                         </div>
                                     </div>
