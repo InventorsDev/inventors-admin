@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import ViewProfile from '@/components/view-profile';
+import Table from '@/components/Table';
 
 import { inventorsLeads } from '@/utils/leads';
 import { shortenEmail, shortenPhone } from '@/utils/helpers';
@@ -81,10 +82,10 @@ const Inventors = () => {
 		}
 	}, [searchText, allLeads]);
 
-	const tableHeaders = [
+	const columns = [
 		{
 			key: 'select',
-			content: (
+			title: (
 				<input
 					type="checkbox"
 					className="accent-primaryGreen"
@@ -94,22 +95,22 @@ const Inventors = () => {
 					}
 					onChange={(e) => {
 						if (e.target.checked) {
-							// Select all leads
 							setSelectedLeads(filteredLeads);
 						} else {
-							// Unselect all leads
 							setSelectedLeads([]);
 						}
 					}}
 				/>
 			),
+			className: '',
+			renderHeader: undefined,
 		},
-		{ key: 'name', content: 'Name' },
-		{ key: 'school', content: 'School (Alumni)' },
-		{ key: 'email', content: 'Email' },
-		{ key: 'phone', content: 'Phone', className: 'hidden lg:block' },
-		{ key: 'status', content: 'Status' },
-		{ key: 'action', content: 'Action' },
+		{ key: 'name', title: 'Name' },
+		{ key: 'school', title: 'School (Alumni)' },
+		{ key: 'email', title: 'Email' },
+		{ key: 'phone', title: 'Phone', className: 'hidden lg:block' },
+		{ key: 'status', title: 'Status' },
+		{ key: 'action', title: 'Action' },
 	];
 
 	return (
@@ -215,7 +216,7 @@ const Inventors = () => {
 							<h3 className="font-semibold text-[#29343D] text-lg">
 								Oops, Nothing to see here, right?
 							</h3>
-							<p className="text-[#98A4AE]">Let’s get your profile set up.</p>
+							<p className="text-[#98A4AE]">Let's get your profile set up.</p>
 							<Button primaryButton>Go to profile</Button>
 						</div>
 					</div>
@@ -224,111 +225,87 @@ const Inventors = () => {
 
 			{currentLeads?.length > 0 && (
 				<>
-					<div className="bg-white rounded-xl p-6 mt-5">
-						<table className="min-w-full">
-							<thead className="text-left text-[#464646] font-normal">
-								<tr className="border-b-[2px] border-[#EFF2F7]">
-									{tableHeaders.map((header) => (
-										<th
-											key={header.key}
-											className={`py-4 px-5 ${header.className}`}
-										>
-											{header.content}
-										</th>
-									))}
-								</tr>
-							</thead>
-							<tbody className="">
-								{currentLeads?.map((lead, index) => (
-									<tr
-										key={index}
-										className={`border-b-[2px]  ${
-											selectedLeads.some(
-												(selectedLead) => selectedLead.id === lead.id
-											)
-												? 'bg-mintGreen border-white'
-												: 'border-[#EFF2F7]'
-										}`}
-									>
-										<td className="py-4 px-5">
-											<input
-												type="checkbox"
-												className="accent-primaryGreen"
-												checked={selectedLeads.some(
-													(selectedLead) => selectedLead.id === lead.id
-												)}
-												onChange={(e) => {
-													if (e.target.checked) {
-														setSelectedLeads([...selectedLeads, lead]);
-													} else {
-														setSelectedLeads(
-															selectedLeads.filter(
-																(selectedLead) => selectedLead.id !== lead.id
-															)
-														);
-													}
-												}}
-											/>
-										</td>
-										<td className="py-4 px-5">
-											<div className="flex items-center gap-3">
-												<Image
-													src="/images/profile-icon.png" // Replace with actual image path or dynamic URL if available
-													alt="Profile Icon"
-													width={40}
-													height={40}
-													className="rounded-full"
-												/>
-												<div className="">
-													<p className="font-semibold text-[#464646]">
-														{lead.name}
-													</p>
-													<span className="text-[#B5B5B5] text-sm">
-														{lead.position}
-													</span>
-												</div>
-											</div>
-										</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">
-											{lead.school + (lead.alumni ? ' (Alumni)' : '')}
-										</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">
-											{shortenEmail(lead.email)}
-										</td>
-										<td className="py-4 px-5 text-[#B5B5B5] hidden lg:block">
-											{shortenPhone(lead.phone)}
-										</td>
-										<td className="py-4 px-5">
-											<span
-												className={`${
-													lead.status === 'Approved'
-														? 'text-primaryGreen bg-mintGreen'
-														: lead.status === 'Declined'
-														? 'text-red-500 bg-red-100'
-														: lead.status === 'Deactivated'
-														? 'text-gray-500 bg-gray-200'
-														: 'text-yellow-500 bg-yellow-100'
-												} px-4 py-2 rounded-full text-sm`}
-											>
-												{lead.status}
-											</span>
-										</td>
-										<td className="py-4 px-5 text-[#B5B5B5]">
-											<Icon
-												icon="ph:eye"
-												className="text-[#909090] text-lg cursor-pointer"
-												onClick={() => {
-													setShowUserProfile(true);
-													setIdOfLeadToShow(lead.id);
-												}}
-											/>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-
+					<Table
+						columns={columns}
+						data={currentLeads}
+						rowKey={(row) => row.id}
+						renderRow={(lead, index) => [
+							<td className="py-4 px-5" key="select">
+								<input
+									type="checkbox"
+									className="accent-primaryGreen"
+									checked={selectedLeads.some(
+										(selectedLead) => selectedLead.id === lead.id
+									)}
+									onChange={(e) => {
+										if (e.target.checked) {
+											setSelectedLeads([...selectedLeads, lead]);
+										} else {
+											setSelectedLeads(
+												selectedLeads.filter(
+													(selectedLead) => selectedLead.id !== lead.id
+												)
+											);
+										}
+									}}
+								/>
+							</td>,
+							<td className="py-4 px-5" key="name">
+								<div className="flex items-center gap-3">
+									<Image
+										src="/images/profile-icon.png"
+										alt="Profile Icon"
+										width={40}
+										height={40}
+										className="rounded-full"
+									/>
+									<div>
+										<p className="font-semibold text-[#464646]">{lead.name}</p>
+										<span className="text-[#B5B5B5] text-sm">
+											{lead.position}
+										</span>
+									</div>
+								</div>
+							</td>,
+							<td className="py-4 px-5 text-[#B5B5B5]" key="school">
+								{lead.school + (lead.alumni ? ' (Alumni)' : '')}
+							</td>,
+							<td className="py-4 px-5 text-[#B5B5B5]" key="email">
+								{shortenEmail(lead.email)}
+							</td>,
+							<td
+								className="py-4 px-5 text-[#B5B5B5] hidden lg:block"
+								key="phone"
+							>
+								{shortenPhone(lead.phone)}
+							</td>,
+							<td className="py-4 px-5" key="status">
+								<span
+									className={`${
+										lead.status === 'Approved'
+											? 'text-primaryGreen bg-mintGreen'
+											: lead.status === 'Declined'
+											? 'text-red-500 bg-red-100'
+											: lead.status === 'Deactivated'
+											? 'text-gray-500 bg-gray-200'
+											: 'text-yellow-500 bg-yellow-100'
+									} px-4 py-2 rounded-full text-sm`}
+								>
+									{lead.status}
+								</span>
+							</td>,
+							<td className="py-4 px-5 text-[#B5B5B5]" key="action">
+								<Icon
+									icon="ph:eye"
+									className="text-[#909090] text-lg cursor-pointer"
+									onClick={() => {
+										setShowUserProfile(true);
+										setIdOfLeadToShow(lead.id);
+									}}
+								/>
+							</td>,
+						]}
+					/>
 					<div className="flex items-center justify-between w-full pt-5 px-5 font-semibold">
 						<p className="text-[#070707]">
 							Page {currentPage} of{' '}
@@ -372,10 +349,10 @@ const Inventors = () => {
 					/>
 					<div className="text-center space-y-3">
 						<h3 className="font-semibold text-[#29343D] text-lg">
-							Deactivate Kelvin’s profile?
+							Deactivate Kelvin's profile?
 						</h3>
 						<p className="text-[#98A4AE]">
-							You’re about to delete this lead’s profile...
+							You're about to delete this lead's profile...
 						</p>
 						<div className="flex items-center justify-between gap-5 text-sm">
 							<button className="bg-[#FFE7E9] text-[#FF2B3F] rounded-lg p-2 w-full flex items-center justify-center gap-2">
