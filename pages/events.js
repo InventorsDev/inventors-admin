@@ -69,7 +69,6 @@ export default function EventsPage() {
 				setOpenActionMenu(null);
 			}
     	}
-		
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
