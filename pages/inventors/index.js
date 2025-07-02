@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-// import { useSearchParams } from 'next/navigation';
 import Layout from '@/layouts/main';
 
 import { Icon } from '@iconify/react';
@@ -22,8 +21,6 @@ const tabs = [
 
 const Inventors = () => {
 	const router = useRouter();
-	// const searchParams = useSearchParams();
-	// const view = searchParams.get("view")
 
 	const [selectedLeads, setSelectedLeads] = useState([]);
 	const [searchText, setSearchText] = useState('');
@@ -124,17 +121,6 @@ const Inventors = () => {
 				idOfLeadToShow={idOfLeadToShow}
 				handleCloseProfile={() => setShowUserProfile(false)}
 			/>
-
-			{/* {view == "edit" ? 
-				<EditEvent 
-					show={showUserProfile}
-					handleCloseEvent={() => setShowUserProfile(false)}
-				/>
-				: <ViewEvent
-					show={showUserProfile}
-					handleCloseEvent={() => setShowUserProfile(false)}
-				/>
-			} */}
 
 			{/* Search */}
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">

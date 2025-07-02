@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import Layout from '@/layouts/main';
 import Table from '@/components/Table';
 import Button from '@/components/Button';
+import ViewEvent from '@/components/ViewEvent';
+import EditEvent from '@/components/EditEvent';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 
@@ -40,19 +44,32 @@ export default function EventsPage() {
 	const [filteredEvents, setFilteredEvents] = useState(mockEvents);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [eventsPerPage] = useState(5);
+	const [showEditOrView, setShowEditOrView] = useState(false);
 	const [openActionMenu, setOpenActionMenu] = useState(null);
 	const actionMenuRefs = useRef({});
+
+	// Required Initialized parameters for view and edit events
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const view = searchParams.get("view");
 
 	// Click-away-to-close for actions dropdown
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (openActionMenu !== null) {
-				const ref = actionMenuRefs.current[openActionMenu];
-				if (ref && !ref.contains(event.target)) {
-					setOpenActionMenu(null);
+				const buttonRef = actionMenuRefs.current[openActionMenu];
+				const menuRef = actionMenuRefs.current[`menu-${openActionMenu}`];
+				if (
+					(buttonRef && buttonRef.contains(event.target)) ||
+					(menuRef && menuRef.contains(event.target))
+				) {
+					// Click is inside the button or menu, do nothing
+					return;
 				}
+				setOpenActionMenu(null);
 			}
-		}
+    	}
+		
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
@@ -141,6 +158,17 @@ export default function EventsPage() {
 
 	return (
 		<div className="p-6">
+			{view == "edit" ? 
+				<EditEvent 
+					show={showEditOrView}
+					handleCloseEvent={() => setShowEditOrView(false)}
+				/>
+				: <ViewEvent
+					show={showEditOrView}
+					handleCloseEvent={() => setShowEditOrView(false)}
+				/>
+			}
+
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">
 				<input
 					type="search"
@@ -300,12 +328,22 @@ export default function EventsPage() {
 										<button
 											className="w-full flex items-center gap-2 px-4 py-2 hover:bg-mintGreen text-left"
 											type="button"
+											onClick={(e) => {
+												e.preventDefault();
+												router.push("");
+												setShowEditOrView(true)
+											}}
 										>
 											<Icon icon="ph:eye" /> View Event
 										</button>
 										<button
 											className="w-full flex items-center gap-2 px-4 py-2 hover:bg-mintGreen text-left"
 											type="button"
+											onClick={(e) => {
+												e.preventDefault();
+												router.push("?view=edit");
+												setShowEditOrView(true);
+											}}
 										>
 											<Icon icon="tabler:edit" /> Edit Event
 										</button>
