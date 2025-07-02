@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Icon } from '@iconify/react';
-
 import Button from './Button';
 import SkeletonLoader from './SkeletonLoader';
 import ApprovalModal from './ApprovalModal';
+import Drawer from './Drawer';
+import { Icon } from '@iconify/react';
 
 import { inventorsLeads } from '@/utils/leads';
 
-const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
+const ViewProfile = ({ show, idOfLeadToShow, handleCloseProfile }) => {
     const [userDetails, setUserDetails] = useState();
     const [showApprovalModal, setShowApprovalModal] = useState({state: false, isApproval: false});
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (show) {
             setLoading(true);
 
@@ -26,31 +26,25 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
             // fetch user specific data
             const user = inventorsLeads.find(lead => lead.id == idOfLeadToShow);
             setUserDetails(user);
-
         }
     }, [show]);
 
     return (
-        <div id="view-user-profile" className={`${show? "show-profile-slider": "remove-profile-slide"} fixed z-[50] top-0 left-0 w-full h-full`}>
+        <React.Fragment>
             {showApprovalModal.state && 
                 <ApprovalModal 
                     handleCloseApprovalModal={() => setShowApprovalModal({state: false, isApproval: false})} 
                     isApproval={showApprovalModal.isApproval} userName={userDetails?.name?.split(" ")[0]}
                 />
             }
-            <div id="backdrop" onClick={() => handleCloseProfile()} className='hidden sm:block w-full h-full absolute backdrop-brightness-[.2] z-50 cursor-pointer top-0 left-0'></div>
+            
+            <Drawer 
+                show={show}
+                userDetails={userDetails}
+                handleClose={() => handleCloseProfile()}
+            >
 
-            <div id="profile-content" className={`${show? "show-profile-slide": "remove-profile-slide"} overflow-y-scroll translate-x-[-100%] w-full lg:w-[55%] p-2 sm:p-5 py-0 absolute z-[100] h-full top-0 left-0 lg:left-[45%] bg-white`}> 
-                <div id="x-button" 
-                    className={`w-full flex py-2 cursor-pointer justify-end ${(userDetails?.status == "Approved" || userDetails?.status == "Declined") && "py-6"}`} 
-                    onClick={() => handleCloseProfile()}
-                >
-                    <Icon icon="heroicons:x-mark-16-solid" 
-                        className='rounded-full border-2 border-black' width="24" height="24"
-                    ></Icon>
-                </div>
-
-                <div className='bg-green-100 p-4 space-y-3'>
+                <div id='content' className='bg-[var(--mint-green)] p-4 space-y-3'>
                     {/* Only Get the chance to decline or approve if user's status is neither   */}
                     {!(userDetails?.status == "Approved" || userDetails?.status == "Declined") && 
                         <div id="decline-approve" className='w-full flex gap-2 justify-end'>
@@ -86,7 +80,7 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
 
                         <div id="overview-text" className='space-y-1 text-sm'>
                             <h1 className="font-bold text-lg p-2">{userDetails.name} <span className='text-sm px-2 italic font-normal text-gray-600'>
-                                {userDetails.position} <span className='text-[#00B598]'>@{userDetails.company}</span></span>
+                                {userDetails.position} <span className='text-[var(--mint-green)]'>@{userDetails.company}</span></span>
                             </h1>
                             <div className='flex flex-col md:flex-row gap-2 italic'>
                                 <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1'>
@@ -131,34 +125,34 @@ const ViewProfile = ({show, handleCloseProfile, idOfLeadToShow}) => {
                         (<><div className='flex flex-col md:flex-row gap-2 italic w-full text-sm'>
                                 <div className='border-b pb-4 md:pb-0 md:border-b-0 md:border-r border-gray-400 p-2 space-y-1 basis-[50%]'>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>Skill Profile URL: </p>
+                                        <span>Skill Profile URL: </span>
                                         <Link href={userDetails.links.profile} className='text-gray-600 text-xs xs:text-sm px-2'>{userDetails.links.profile}</Link>
                                     </p>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>X (Twitter):</p> 
+                                        <span>X (Twitter):</span> 
                                         <Link href={userDetails.links.twitter} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.twitter}</Link> 
                                     </p>
                                 </div>
                                 <div className='border-gray-400 p-2 space-y-1 basis-[50%]'>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>LinkedIn:</p>
+                                        <span>LinkedIn:</span>
                                         <Link href={userDetails.links.linkedin} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.linkedin}</Link>
                                     </p>
                                     <p className='text-gray-400 xs:flex'>
-                                        <p>Facebook:</p> 
+                                        <span>Facebook:</span> 
                                         <Link href={userDetails.links.facebook} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.facebook}</Link> 
                                     </p>
                                 </div>
                             </div>
                             <p className='text-gray-400 text-sm px-2 xs:flex'>
-                                <p>Personal Website (portfolio):</p> 
+                                <span>Personal Website (portfolio):</span> 
                                 <Link href={userDetails.links.portfolio} className="text-gray-600 text-xs xs:text-sm px-2">{userDetails.links.portfolio}</Link>
                             </p>
                         </>): <SkeletonLoader />}
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>  
+            </Drawer>
+        </React.Fragment>
     );
 }
 
