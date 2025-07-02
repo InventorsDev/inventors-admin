@@ -50,7 +50,7 @@ const EditEvent = ({ show, handleCloseEvent }) => {
                     {/* cancel - draft and publish buttons  */}
                     <div id="cancel-draft-publish" className='justify-end w-full flex gap-2 items-center'>
                         <Button 
-                            buttonProps={{onClick: () => console.log("Cancel Event")}}
+                            buttonProps={{onClick: () => handleCloseEvent()}}
                             className={'flex gap-2 items-center py-1 bg-red-white text-red-500 border-red-500'}
                         >
                             <Icon icon="heroicons:x-mark-16-solid" 
