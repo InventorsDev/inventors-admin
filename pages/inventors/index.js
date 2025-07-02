@@ -6,9 +6,7 @@ import Layout from '@/layouts/main';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Button from '@/components/Button';
-import ViewProfile from '@/components/ViewProfile';
-// import ViewEvent from '@/components/ViewEvent';
-// import EditEvent from '@/components/EditEvent';
+import ViewProfile from '@/components/view-profile';
 
 import { inventorsLeads } from '@/utils/leads';
 import { shortenEmail, shortenPhone } from '@/utils/helpers';
