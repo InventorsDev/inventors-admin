@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FiUploadCloud } from 'react-icons/fi';
-import Sidebar from '@/components/Sidebar'; // Adjust if needed
+import Sidebar from '@/components/Sidebar';
 
 export default function AddNewEvent() {
   const router = useRouter();
@@ -81,7 +81,6 @@ export default function AddNewEvent() {
           <h2 className="text-2xl font-semibold">Add new event</h2>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="border-2 border-green-200 bg-white p-8 rounded-xl shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -186,8 +185,6 @@ export default function AddNewEvent() {
                 />
               </label>
             </div>
-
-            {/* 👇 Preview Section */}
             {previewUrl && (
               <div className="mt-4 text-center">
                 {form.flyer?.type.startsWith('image/') ? (
