@@ -1,68 +1,81 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { Icon } from '@iconify/react';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
-import logoDark from '@/public/images/logo-dark.png';
-import { useAuth } from '@/contexts/AuthContext';
+import { Icon as IconifyIcon } from "@iconify/react";
+import {
+  Category,
+  Notification,
+  MenuBoard,
+  Profile,
+  TagUser,
+  Setting3,
+  Logout,
+} from "iconsax-reactjs";
+
+import logoDark from "@/public/images/logo-dark.png";
+import { useAuth } from "@/contexts/AuthContext";
+
+// Local Icon component
+const Icon = ({ name, ...props }) => <IconifyIcon icon={name} {...props} />;
 
 const Sidebar = () => {
   const router = useRouter();
   const { user, logout } = useAuth();
 
-  const isAdmin = user?.role?.includes('ADMIN');
+  const isAdmin = user?.role?.includes("ADMIN");
 
   const topMenuItems = [
     {
-      title: 'Overview',
-      link: '/',
-      icon: 'solar:widget-bold',
+      title: "Overview",
+      link: "/",
+      icon: <Category size="25" variant="Bold" />,
     },
     {
-      title: 'Notification',
-      link: '/notification',
-      icon: 'solar:bell-bold',
+      title: "Notification",
+      link: "/notification",
+      icon: <Notification size="25" variant="Bold" />,
     },
     {
-      title: 'Events',
-      link: '/events',
-      icon: 'solar:calendar-bold',
+      title: "Events",
+      link: "/events",
+      icon: <MenuBoard size="25" variant="Bold" />,
     },
     isAdmin && {
-      title: 'Inventors',
-      link: '/inventors',
-      icon: 'solar:user-bold',
+      title: "Inventors",
+      link: "/inventors",
+      icon: <Profile size="25" variant="Bold" />,
     },
     {
-      title: 'Profile',
-      link: '/profile',
-      icon: 'solar:user-circle-bold',
+      title: "Profile",
+      link: "/profile",
+      icon: <Icon name="solar:user-circle-bold" className="text-lg" />,
     },
     {
-      title: 'Blog',
-      link: '/blog',
-      icon: 'tabler:rss',
+      title: "Blog",
+      link: "/blog",
+      icon: <Icon name="tabler:rss" className="text-lg" />,
     },
   ].filter(Boolean); // removes false/null entries like when isAdmin is false
 
   const bottomMenuItems = [
     {
-      title: 'Invite',
-      link: '/invite',
-      icon: 'fa6-solid:user-tag',
-      classNames: 'bg-orange-50 text-orange-500',
+      title: "Invite",
+      link: "/invite",
+      icon: <TagUser size="25" variant="Bold" />,
+      classNames: "bg-orange-50 text-orange-500 justify-center !ps-0",
     },
     {
-      title: 'Settings',
-      link: '/settings',
-      icon: 'mi:filter',
-      classNames: 'bg-teal-50 text-teal-500',
+      title: "Settings",
+      link: "/settings",
+      icon: <Setting3 size="25" variant="Bold" />,
+      classNames: "bg-teal-50 text-teal-500",
     },
     {
-      title: 'Logout',
+      title: "Logout",
       action: logout,
-      icon: 'solar:logout-bold-duotone',
-      classNames: 'text-red-600',
+      icon: <Logout size="25" variant="Bold" />,
+      classNames: "text-red-600",
     },
   ];
 
@@ -78,15 +91,16 @@ const Sidebar = () => {
         <div className="mt-10 pb-2 border-b border-gray-100 text-lightGray">
           <ul className="mt-4 flex flex-col gap-y-2 list-none">
             {topMenuItems.map((menuItem, i) => (
-              <li className="text-sm" key={i}>
+              <li className="text-base" key={i}>
                 <Link
-                  className={`flex items-center rounded-xl ps-4 py-3 gap-3 ${router.pathname === menuItem.link
-                    ? 'bg-primaryGreen text-white shadow-xl shadow-teal-50'
-                    : 'text-gray-600'
-                    }`}
+                  className={`flex items-center rounded-xl ps-4 py-3 gap-3 ${
+                    router.pathname === menuItem.link
+                      ? "bg-primaryGreen text-white shadow-xl shadow-teal-100/80"
+                      : "text-gray-600"
+                  }`}
                   href={menuItem.link}
                 >
-                  <Icon icon={menuItem.icon} className="text-lg" />
+                  {menuItem.icon}
                   <span>{menuItem.title}</span>
                 </Link>
               </li>
@@ -103,7 +117,7 @@ const Sidebar = () => {
                     className={`flex items-center rounded-full ps-4 py-3 gap-3 ${menuItem.classNames}`}
                     href={menuItem.link}
                   >
-                    <Icon icon={menuItem.icon} className="text-lg" />
+                    {menuItem.icon}
                     <span>{menuItem.title}</span>
                   </Link>
                 ) : (
@@ -111,7 +125,7 @@ const Sidebar = () => {
                     onClick={menuItem.action}
                     className={`w-full text-left flex items-center rounded-full ps-4 py-3 gap-3 ${menuItem.classNames}`}
                   >
-                    <Icon icon={menuItem.icon} className="text-lg" />
+                    {menuItem.icon}
                     <span>{menuItem.title}</span>
                   </button>
                 )}

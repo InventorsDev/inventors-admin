@@ -26,39 +26,39 @@
 /* General styles used for add new inventor form */
 
 .icon {
-  @apply bg-[#00B598] flex justify-center items-center p-2 rounded-full w-fit cursor-pointer
+  @apply bg-[#00B598] flex justify-center items-center p-2 rounded-full w-fit cursor-pointer;
 }
 
 .line {
-  @apply bg-[#D3D3D3] w-[100%] h-[0.1rem] mt-5
+  @apply bg-[#D3D3D3] w-[100%] h-[0.1rem] mt-5;
 }
 
 .active-line {
-  @apply bg-[#005B4C]
+  @apply bg-[#005B4C];
 }
 
 .button {
-  @apply py-3 px-4 font-semibold cursor-pointer
+  @apply py-3 px-4 font-semibold cursor-pointer;
 }
 
 .ease-transition {
-  @apply transition ease-out duration-300
+  @apply transition ease-out duration-300;
 }
 
 .horizontal-rule {
-  @apply h-[2px] w-full bg-[#F2EBF3] rounded
+  @apply h-[2px] w-full bg-[#F2EBF3] rounded;
 }
 
 .label-input {
-  @apply flex flex-col w-full gap-2 text-sm text-[#29343D]
+  @apply flex flex-col w-full gap-2 text-sm text-[#29343D];
 }
 
 .form-input {
-  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full ease-transition text-lightGray
+  @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full ease-transition text-lightGray;
 }
 
 .form-input:focus {
-  @apply outline-primaryGreen
+  @apply outline-primaryGreen;
 }
 
 .show-profile-slide {
@@ -67,4 +67,11 @@
 
 .remove-profile-slide {
   @apply transition-all translate-x-[100%] duration-300 ease-out;
+}
+
+/* Custom components */
+.select-custom {
+  @apply text-sm border border-gray-300 outline-none rounded-md px-2 py-2 appearance-none pr-8
+  bg-no-repeat bg-[length:16px_12px] bg-[right_8px_center]
+  bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236B7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')];
 }
