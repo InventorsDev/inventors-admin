@@ -36,43 +36,45 @@ export default function InviteLeadPage() {
 	};
 
 	return (
-		<div className="bg-white p-6 rounded-xl max-w-xl mx-auto relative">
-			<h1 className="text-2xl font-semibold mb-4">Invite a New Lead</h1>
+		<div className='bg-[var(--mint-green)] w-full min-h-[65vh] flex items-center'>
+			<div className="bg-white p-6 my-auto min-w-[340px] md:min-w-[400px] rounded-xl max-w-xl mx-auto relative">
+				<h1 className="text-2xl font-semibold mb-4">Invite a New Lead</h1>
 
-			<label className="block text-sm mb-2">Lead's Email Address</label>
-			<input
-				type="email"
-				className="form-input w-full mb-4"
-				placeholder="lead@example.com"
-				value={email}
-				onChange={(e) => setEmail(e.target.value)}
-			/>
-
-			<Button
-				primaryButton
-				buttonProps={{ onClick: handleInvite, disabled: loading || !email }}
-				className="flex items-center gap-2"
-			>
-				{loading ? (
-					<>
-						<Icon icon="eos-icons:loading" className="animate-spin" />
-						Sending...
-					</>
-				) : (
-					<>
-						<Icon icon="mdi:email-send-outline" />
-						Send Invite
-					</>
-				)}
-			</Button>
-
-			{toast && (
-				<Toast
-					message={toast.message}
-					type={toast.type}
-					onClose={() => setToast(null)}
+				<label className="block text-sm mb-2">Lead's Email Address</label>
+				<input
+					type="email"
+					className="form-input w-full mb-4"
+					placeholder="lead@example.com"
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
 				/>
-			)}
+
+				<Button
+					primaryButton
+					buttonProps={{ onClick: handleInvite, disabled: loading || !email }}
+					className="flex items-center gap-2"
+				>
+					{loading ? (
+						<>
+							<Icon icon="eos-icons:loading" className="animate-spin" />
+							Sending...
+						</>
+					) : (
+						<>
+							<Icon icon="mdi:email-send-outline" />
+							Send Invite
+						</>
+					)}
+				</Button>
+
+				{toast && (
+					<Toast
+						message={toast.message}
+						type={toast.type}
+						onClose={() => setToast(null)}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }

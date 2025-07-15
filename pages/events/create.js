@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FiUploadCloud } from 'react-icons/fi';
-import Sidebar from '@/components/Sidebar';
+import Button from '@/components/Button';
+import Layout from '@/layouts/main';
 
 export default function AddNewEvent() {
   const router = useRouter();
@@ -67,20 +67,7 @@ export default function AddNewEvent() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      <Sidebar />
-
       <main className="flex-1 p-8">
-        {/* Header */}
-        <div className="flex items-center mb-6">
-          <button
-            onClick={() => router.back()}
-            className="text-gray-600 hover:text-black mr-4"
-          >
-            ← Back
-          </button>
-          <h2 className="text-2xl font-semibold">Add new event</h2>
-        </div>
-
         <form
           onSubmit={handleSubmit}
           className="border-2 border-green-200 bg-white p-8 rounded-xl shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -173,7 +160,7 @@ export default function AddNewEvent() {
             <label className="block text-sm font-medium mb-1">Event Flyer</label>
             <div className="w-full h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-center p-4">
               <label className="cursor-pointer w-full h-full flex flex-col items-center justify-center text-gray-500">
-                <FiUploadCloud className="text-xl mb-1" />
+                {/* <FiUploadCloud className="text-xl mb-1" /> */}
                 <p className="text-sm font-medium">Upload your event flyer</p>
                 <p className="text-xs text-gray-400">PNG, JPG, SVG, PDF up to 5MB</p>
                 <input
@@ -208,15 +195,14 @@ export default function AddNewEvent() {
           </div>
 
           <div className="md:col-span-2">
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
-            >
-              Submit Event
-            </button>
+            <Button primaryButton buttonProps={{ type: "submit" }}>Submit</Button>
           </div>
         </form>
       </main>
     </div>
   );
 }
+
+AddNewEvent.getLayout = function getLayout(page) {
+  return <Layout showBackButton title="Add New Event">{page}</Layout>;
+};
