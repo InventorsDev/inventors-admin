@@ -193,7 +193,7 @@ export default function EventsPage() {
 						<Icon icon="tabler:calendar-event" className="text-lg" />
 						Calendar
 					</Button>
-					<Button primaryButton className="flex items-center gap-3">
+					<Button buttonProps={{ onClick: () => router.push("/events/create") }} primaryButton className="flex items-center gap-3">
 						<Icon icon="tabler:plus" className="text-lg" />
 						Add new
 					</Button>
