@@ -4,35 +4,16 @@ import { useRouter } from 'next/router';
 import Layout from '@/layouts/main';
 import Table from '@/components/Table';
 import Button from '@/components/Button';
+import Spinner from '@/components/Spinner';
 import ViewEvent from '@/components/ViewEvent';
 import EditEvent from '@/components/EditEvent';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
-
-const mockEvents = [
-	{
-		id: 1,
-		title: 'SDG Chapter Four',
-		author: 'Opeoluwa Ogunmodede',
-		date: '26 May, 2021',
-		time: '10am - 11am',
-		documents: 2,
-		status: 'Approved',
-	},
-	{
-		id: 2,
-		title: 'SDG Chapter Four',
-		author: 'Opeoluwa Ogunmodede',
-		date: '26 May, 2021',
-		time: '10am - 11am',
-		documents: 2,
-		status: 'Unapproved',
-	},
-	// Add more mock events as needed
-];
+import { formatDateTime } from '@/utils/helpers/formatDateTime';
 
 const tabs = [
 	{ name: 'All', active: true },
+	{ name: 'Pending', active: false },
 	{ name: 'Approved', active: false },
 	{ name: 'Unapproved', active: false },
 ];
@@ -40,18 +21,55 @@ const tabs = [
 export default function EventsPage() {
 	const [selectedEvents, setSelectedEvents] = useState([]);
 	const [searchText, setSearchText] = useState('');
-	const [allEvents] = useState(mockEvents);
-	const [filteredEvents, setFilteredEvents] = useState(mockEvents);
+	const [events, setEvents] = useState([]);
+	const [filteredEvents, setFilteredEvents] = useState(events);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [eventsPerPage] = useState(5);
+	const [eventsPerPage, setEventsPerPage] = useState(5);
 	const [showEditOrView, setShowEditOrView] = useState(false);
 	const [openActionMenu, setOpenActionMenu] = useState(null);
+	const [loading, setLoading] = useState(false);
 	const actionMenuRefs = useRef({});
 
 	// Required Initialized parameters for view and edit events
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const view = searchParams.get("view");
+
+	// fetch events data
+	useEffect(() => {
+		const controller = new AbortController();
+
+		const fetchEventsData = async () => {
+			setLoading(true);
+			try {
+				const response = await fetch("/api/get-events");
+				const data = await response.json();
+				
+				setEvents(data?.results);
+				setFilteredEvents(data?.results);
+				setEventsPerPage(data.perPageLimit);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		fetchEventsData();
+
+		return () => controller.abort();
+	}, []);
+
+	// open-edit-or-view sidebar if URL has parameters
+	useEffect(() => {
+		const idSearchParam = searchParams.get("id");
+		const viewSearchParam = searchParams.get("view");
+		
+		if (!idSearchParam && !viewSearchParam) {
+			return;
+		} 
+
+		setShowEditOrView(true);
+	}, []);
 
 	// Click-away-to-close for actions dropdown
 	useEffect(() => {
@@ -80,9 +98,9 @@ export default function EventsPage() {
 		tabs.forEach((tab, idx) => (tab.active = idx === tabIdx));
 		const tab = tabs[tabIdx];
 		if (tab.name === 'All') {
-			setFilteredEvents(allEvents);
+			setFilteredEvents(events);
 		} else {
-			setFilteredEvents(allEvents.filter((event) => event.status === tab.name));
+			setFilteredEvents(events.filter((event) => event.status.toLowerCase() === tab.name.toLowerCase()));
 		}
 		setSelectedEvents([]);
 		setSearchText('');
@@ -94,7 +112,7 @@ export default function EventsPage() {
 		const value = e.target.value;
 		setSearchText(value);
 		const activeTab = tabs.find((tab) => tab.active);
-		let filtered = allEvents;
+		let filtered = events;
 		if (activeTab.name !== 'All') {
 			filtered = filtered.filter((event) => event.status === activeTab.name);
 		}
@@ -154,6 +172,13 @@ export default function EventsPage() {
 		{ key: 'status', title: 'Status' },
 		{ key: 'actions', title: 'Actions' },
 	];
+
+	if (loading) return (
+		<div className={"w-full min-h-[70vh] gap-3 h-full flex justify-center items-center"}>
+			<Spinner />
+			<p>Loading events data...</p>
+		</div>
+	)
 
 	return (
 		<div className="p-6">
@@ -260,7 +285,7 @@ export default function EventsPage() {
 							<td className="py-4 px-5" key="title">
 								<div className="flex items-center gap-3">
 									<Image
-										src="/images/profile-icon.png"
+										src={event.photo && (event.photo !== "string") ? `${event.photo}`: "/images/profile-icon.png"}
 										alt="Event Icon"
 										width={40}
 										height={40}
@@ -272,14 +297,15 @@ export default function EventsPage() {
 								</div>
 							</td>,
 							<td className="py-4 px-5 text-[#B5B5B5]" key="author">
-								{event.author}
+								{event.host}
 							</td>,
 							<td className="py-4 px-5 text-[#B5B5B5]" key="date">
-								{event.date}
-								<div className="text-xs text-[#98A4AE]">{event.time}</div>
+								{formatDateTime(event.eventDate).date}
+								<div className="text-xs text-[#98A4AE]">{formatDateTime(event.eventDate).timeWithExtension}</div>
 							</td>,
 							<td className="py-4 px-5 text-[#B5B5B5]" key="documents">
-								+{event.documents} documents
+								{/* API doesn't take any docuemnts for events */}
+								+{event.documents || 0} documents
 								<Icon
 									icon="tabler:download"
 									className="inline ml-2 text-lg text-primaryGreen cursor-pointer"
@@ -291,8 +317,8 @@ export default function EventsPage() {
 										event.status === 'Approved'
 											? 'text-primaryGreen bg-mintGreen'
 											: event.status === 'Unapproved'
-											? 'text-yellow-500 bg-yellow-100'
-											: ''
+											? 'text-red-500 bg-red-100'
+											: 'text-yellow-500 bg-yellow-100'
 									}`}
 								>
 									{event.status}
@@ -303,13 +329,13 @@ export default function EventsPage() {
 									className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 focus:outline-none"
 									onClick={() =>
 										setOpenActionMenu(
-											openActionMenu === event.id ? null : event.id
+											openActionMenu === event._id ? null : event._id
 										)
 									}
 									aria-label="Open actions menu"
 									type="button"
 									ref={(el) => {
-										actionMenuRefs.current[event.id] = el;
+										actionMenuRefs.current[event._id] = el;
 									}}
 								>
 									<Icon
@@ -317,10 +343,10 @@ export default function EventsPage() {
 										className="text-[#909090] text-lg"
 									/>
 								</button>
-								{openActionMenu === event.id && (
+								{openActionMenu === event._id && (
 									<div
 										ref={(el) => {
-											actionMenuRefs.current[`menu-${event.id}`] = el;
+											actionMenuRefs.current[`menu-${event._id}`] = el;
 										}}
 										className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20 animate-fade-in"
 									>
@@ -329,7 +355,7 @@ export default function EventsPage() {
 											type="button"
 											onClick={(e) => {
 												e.preventDefault();
-												router.push("");
+												router.push(`?id=${event._id}`);
 												setShowEditOrView(true)
 											}}
 										>
@@ -340,7 +366,7 @@ export default function EventsPage() {
 											type="button"
 											onClick={(e) => {
 												e.preventDefault();
-												router.push("?view=edit");
+												router.push(`?view=edit&id=${event._id}`);
 												setShowEditOrView(true);
 											}}
 										>
