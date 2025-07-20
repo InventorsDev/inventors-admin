@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import ViewEvent from '@/components/ViewEvent';
 import EditEvent from '@/components/EditEvent';
+import Toast from '@/components/ui/Toast';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import { formatDateTime } from '@/utils/helpers/formatDateTime';
@@ -28,6 +29,8 @@ export default function EventsPage() {
 	const [showEditOrView, setShowEditOrView] = useState(false);
 	const [openActionMenu, setOpenActionMenu] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [deletingEvent, setDeletingEvent] = useState(false);
+	const [toast, setToast] = useState(null);
 	const actionMenuRefs = useRef({});
 
 	// Required Initialized parameters for view and edit events
@@ -92,6 +95,44 @@ export default function EventsPage() {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, [openActionMenu]);
+
+	// Delete Event
+	const deleteEvent = async (eventId) => {
+		setDeletingEvent(true);
+		
+		try {
+			const response = await fetch(`/api/events/delete/${eventId}`, {
+				method: "DELETE",
+			});
+
+			if (!response.ok) {
+				setToast({
+					message: "Failed to delete event.",
+					type: "error",
+				});
+
+				throw new Error("Failed to delete event.");
+			}
+
+			// update UI
+			const eventsWithoutDeletedEvent = [...filteredEvents].filter(event => eventId == event._id);
+			setFilteredEvents(eventsWithoutDeletedEvent);
+
+			// show deletion success toast
+			setToast({
+				message: "Event successfully deleted.",
+				type: "success",
+			});
+		} catch (error) {
+			console.error(error);
+			setToast({
+				message: "Failed to delete event.",
+				type: "error",
+			});
+		} finally {
+			setDeletingEvent(false);
+		}
+	}
 
 	// Tab logic
 	const handleTabClick = (tabIdx) => {
@@ -192,6 +233,14 @@ export default function EventsPage() {
 					handleCloseEvent={() => setShowEditOrView(false)}
 				/>
 			}
+
+			{toast && (
+				<Toast 
+					message={toast.message}
+					type={toast.type}
+					onClose={() => setToast(null)}
+				/>
+			)}
 
 			<div className="bg-white rounded-xl p-6 flex items-center justify-between w-full">
 				<input
@@ -373,10 +422,15 @@ export default function EventsPage() {
 											<Icon icon="tabler:edit" /> Edit Event
 										</button>
 										<button
-											className="w-full flex items-center gap-2 px-4 py-2 hover:bg-red-100 text-red-600 text-left"
+											className="
+												w-full flex items-center gap-2 px-4 py-2 hover:bg-red-100 text-red-600 text-left disabled:opacity-50 
+												disabled:cursor-not-allowed
+											"
 											type="button"
+											disabled={deletingEvent}
+											onClick={() => deleteEvent(event._id)}
 										>
-											<Icon icon="tabler:trash" /> Delete Event
+											<Icon icon="tabler:trash" /> {deletingEvent ? "Deleting...": "Delete Event"}
 										</button>
 									</div>
 								)}
