@@ -37,7 +37,7 @@ export const formatDateTime = (dateTime) => {
 
     // format date
     let [ year, monthIndex, day ] = date.split("-");
-    date = `${day}${getDayExtension(day)} ${month[monthIndex]}, ${year}`;
+    date = `${day < 10 ? day.split("")[1]: day}${getDayExtension(day)} ${month[monthIndex]}, ${year}`;
 
     // format time
     time = time.split(":");
