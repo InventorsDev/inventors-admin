@@ -115,7 +115,7 @@ export default function EventsPage() {
 			}
 
 			// update UI
-			const eventsWithoutDeletedEvent = [...filteredEvents].filter(event => eventId == event._id);
+			const eventsWithoutDeletedEvent = [...filteredEvents].filter(event => eventId !== event._id);
 			setFilteredEvents(eventsWithoutDeletedEvent);
 
 			// show deletion success toast
@@ -428,7 +428,7 @@ export default function EventsPage() {
 											"
 											type="button"
 											disabled={deletingEvent}
-											onClick={() => deleteEvent(event._id)}
+											onClick={() => deleteEvent(event)}
 										>
 											<Icon icon="tabler:trash" /> {deletingEvent ? "Deleting...": "Delete Event"}
 										</button>
