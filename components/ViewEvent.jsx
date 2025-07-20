@@ -1,37 +1,81 @@
-import React, { useState, useLayoutEffect } from 'react';
-import Router from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from './Button';
 import SkeletonLoader from './SkeletonLoader';
 import Drawer from './Drawer';
+import Toast from './ui/Toast';
 import { Icon } from '@iconify/react';
 
-import { eventDetails } from '@/utils/event';
 import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+import { formatDateTime } from '@/utils/helpers/formatDateTime';
 
 const ViewEvent = ({ show, handleCloseEvent }) => {
+    const [eventDetails, setEventDetails] = useState({});
     const [loading, setLoading] = useState(true);
+    const [toast, setToast] = useState(null);
+    const [error, setError] = useState("");
 
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
 
-    useLayoutEffect(() => {
-        if (show) {
-            setLoading(true);
-
-            // simulate the fetching of the data of user
-            setTimeout(() => {
-                setLoading(false);
-            }, 2000);
+    useEffect(() => {
+        if (id == "" || typeof id === null) {
+            setError("Oops, Event ID is missing ... close this slider and try again.");
+            return;
         }
-    }, [show]);
+    }, []);
+
+    useEffect(() => {
+        const id = searchParams.get("id");
+        if (id !== "" && id !== null) setError("");
+
+        if (show && id) {
+            fetchEventDetails();
+        }
+    }, [show, id]);
+
+    const fetchEventDetails = async () => {
+        const id = searchParams.get("id");
+        setLoading(true);
+
+        try {
+            const response = await fetch(`/api/events/${id}`);
+            const data = await response.json();
+
+            setEventDetails(data);
+            console.log(data);
+        } catch (error) {
+            setError(error.message || "Oops, failed to fetch event data ... Please Check your network and try again");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const getStatusStyle = (status) => {
         switch(status) {
             case "approved":
                 return "bg-[var(--mint-green)] text-[var(--primary-green)]"
-            default: // (default case is Unapproved)
+            default: // (default case is pending)
                 return "bg-orange-100 text-orange-500"
         };
+    }
+
+    const copyLinkToClipboard = (link) => {
+        navigator.clipboard.writeText(link);
+        setToast({ message: "Link copied to clipboard.", type: "success" });
+    }
+
+    if (error && error !== "") {
+        return (
+            <Drawer 
+                show={show}
+                handleClose={() => handleCloseEvent()}
+            >
+                <div className='w-full h-[90%] flex justify-center items-center text-red-500 rounded-md bg-red-100'>{error}</div>
+            </Drawer>
+        )
     }
 
     return (
@@ -40,11 +84,23 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                 show={show}
                 handleClose={() => handleCloseEvent()}
             >
+                {toast && (
+                    <Toast
+                        message={toast.message}
+                        type={toast.type}
+                        onClose={() => setToast(null)}
+                    />
+                )}
+
                 <div id="edit-delete" className='w-full text-xs py-2 flex gap-2 justify-end'>
-                    {eventDetails.status.toLowerCase() == "approved"? 
+                    {eventDetails?.status?.toLowerCase() == "approved"? 
                         <>
                             <Button 
-                                buttonProps={{onClick: () => router.push("?view=edit")}}
+                                buttonProps={{onClick: () => { 
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    params.set("view", "edit");
+                                    router.push(`?${params}`);
+                                }}}
                                 className={'flex gap-2 items-center text-gray-500 border-gray-500'}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -86,13 +142,13 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                     }
                 </div>
                 <div id='content' className='bg-[var(--mint-green)] p-4 space-y-4'>
-                    {!loading? <div className="w-full flex flex-col sm:flex-row gap-4 bg-white p-5 py-3 rounded-lg">
+                    {!loading? <div className="w-full items-center flex flex-col md:flex-row lg:flex-col xl:flex-row gap-4 bg-white p-5 py-3 rounded-lg">
                         <Image
-                            src={eventDetails.flyer}
+                            src={eventDetails.photo}
                             alt="Event Flyer"
                             width={160}
-                            height={127}
-                            className=" rounded-lg self-center sm:self-start"
+                            height={180}
+                            className=" rounded-lg w-full md:w-fit min-w-[45%] self-center min-h-full"
                         />
 
                         <div id="overview-text" className='space-y-4 font-semibold text-gray-500  text-sm'>
@@ -113,7 +169,31 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                 </span>
                             </div>
 
-                            <div className="date flex flex-col items-start sm:flex-row sm:items-center gap-4">
+                            <div className="date flex items-start sm:flex-row sm:items-center gap-4">
+                                <label htmlFor="date" className='flex text-gray-600 gap-2 items-center'>
+                                    <Image 
+                                        src={"/images/events/calender.svg"}
+                                        height={24}
+                                        width={24}
+                                        alt='time-icon'
+                                    />
+                                    <p>Date:</p>   
+                                </label>
+                                <div id='date' className='flex flex-col sm:flex-row items-center gap-2'>
+                                    <p>{formatDateTime(eventDetails.eventDate).date}</p>
+                                    <div id='time' className='gap-2 hidden sm:flex self-start items-center'>
+                                        <Image 
+                                            src={"/images/events/date.svg"}
+                                            height={24}
+                                            width={24}
+                                            alt='date-icon'
+                                        />
+                                        <p>{formatDateTime(eventDetails.eventDate).timeWithExtension}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id='time-for-small-screens' className='gap-2 flex self-start items-center sm:hidden'>
                                 <label htmlFor="date" className='flex text-gray-600 gap-2 items-center'>
                                     <Image 
                                         src={"/images/events/date.svg"}
@@ -121,21 +201,9 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                         width={24}
                                         alt='date-icon'
                                     />
-
-                                    <p>Date:</p>   
+                                    <p>Time:</p>   
                                 </label>
-                                <div id='date' className='flex items-center gap-2'>
-                                    <p>{eventDetails.date}</p>
-                                    <div id='time' className='gap-2 flex items-center'>
-                                        <Image 
-                                            src={"/images/events/calender.svg"}
-                                            height={24}
-                                            width={24}
-                                            alt='time-icon'
-                                        />
-                                        <p>{eventDetails.time.start} - {eventDetails.time.end}</p>
-                                    </div>
-                                </div>
+                                <p>{formatDateTime(eventDetails.eventDate).timeWithExtension}</p>
                             </div>
 
                             <div className="assignee flex items-center flex-wrap gap-2">
@@ -147,19 +215,20 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                         alt='assignee-icon'
                                     />
 
-                                    <p>Assignee:</p>   
+                                    <p>Co-Hosts:</p>   
                                 </label>
                                 <div id='assignees' className='flex items-center gap-2'>
-                                    {eventDetails.assignees.map((assignee, index) => (
+                                    {eventDetails.coHost.map((assignee, index) => (
                                         <div id='assignee' key={index} className='rounded-2xl italic bg-[--mint-green] text-gray-500 flex items-center'>
                                             <Image 
-                                                src={assignee.profile}
+                                                // not provided by API
+                                                src={assignee.profile || "/images/profile-icon.png"}
                                                 height={24}
                                                 width={24}
                                                 className='rounded-full'
                                                 alt='Assignee Profile Picture'
                                             />
-                                            <p className='p-1 px-2 text-sm sm:text-base'>{assignee.name}</p>
+                                            <p className='p-1 px-2 text-sm sm:text-base'>{assignee}</p>
                                         </div>
                                     ))}
                                     <button className='text-white p-1 rounded-full bg-[var(--primary-green)]'>
@@ -181,15 +250,19 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                 </label>
 
                                 <div id='location' className='flex items-center gap-2'>
-                                    <p>{eventDetails.location.platform}</p>
-                                    <button id='copy-link' className='gap-2 text-[#00B598] flex items-center'>
+                                    <p>{eventDetails.location} ({eventDetails.joinMethod})</p>
+                                    <button 
+                                        onClick={() => copyLinkToClipboard(eventDetails.link)} 
+                                        id='copy-link' 
+                                        className='gap-2 text-[#00B598] flex items-center'
+                                    >
                                         <Image 
                                             src={"/images/events/copy.svg"}
                                             height={24}
                                             width={24}
                                             alt='copy-icon'
                                         />
-                                        <p>Copy Link</p>
+                                        <p className='hidden sm:inline-block'>{toast ? "Copied!" :"Copy Link"}</p>
                                     </button>
                                 </div>
                             </div>
@@ -204,9 +277,9 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                         </p>: <SkeletonLoader isDescription />}
                     </div>
 
-                    <div id="Attachments" className="w-full min-h-[30vh] p-3 px-5 bg-white rounded-lg space-y-2"> 
+                    <div id="Attachments" className="w-full min-h-[20vh] p-3 px-5 bg-white rounded-lg space-y-2"> 
                         <header className='flex items-center justify-between w-full'>
-                            <h1 className='font-bold'>ATTACHMENTS ({eventDetails["attachments"].length})</h1>
+                            <h1 className='font-bold'>ATTACHMENTS ({eventDetails["attachments"]?.length || 0})</h1>
 
                             <button id="download-all" className='flex gap-2 items-center text-[var(--primary-green)]'>
                                 <Image 
@@ -215,13 +288,14 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                     width={24}
                                     alt='download-icon'
                                 />
-                                <p>Download all</p>
+                                <p className='hidden sm:inline-block'>Download all</p>
                             </button>
                         </header>
 
                         {!loading ? (
-                            <div id='attachments-listing' className='flex flex-col md:flex-row gap-4'>
-                                {eventDetails.attachments.map((attachment, index) => (
+                            <div id='attachments-listing' aria-disabled className='flex opacity min-h-[20px] cursor-not-allowed flex-col md:flex-row gap-4'>
+                                {/* API Doesn't take any attachments */}
+                                {/* {EventsPage.attachments.map((attachment, index) => (
                                     <div id="attachment" key={index} className='flex gap-2 p-2 rounded-md border-2 border-gray-200'>
                                         <Image 
                                             width={37}
@@ -237,7 +311,7 @@ const ViewEvent = ({ show, handleCloseEvent }) => {
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                ))} */}
                             </div>
                             ): <SkeletonLoader />
                         }

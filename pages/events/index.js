@@ -42,7 +42,7 @@ export default function EventsPage() {
 		const fetchEventsData = async () => {
 			setLoading(true);
 			try {
-				const response = await fetch("/api/get-events");
+				const response = await fetch("/api/events/get-events");
 				const data = await response.json();
 				
 				setEvents(data?.results);
@@ -288,8 +288,8 @@ export default function EventsPage() {
 										src={event.photo && (event.photo !== "string") ? `${event.photo}`: "/images/profile-icon.png"}
 										alt="Event Icon"
 										width={40}
-										height={40}
-										className="rounded-full"
+										height={50}
+										className='rounded-sm'
 									/>
 									<span className="font-semibold text-[#464646]">
 										{event.title}
