@@ -57,6 +57,17 @@
   @apply border border-[#E0E6EB] px-4 py-3 rounded-lg w-full ease-transition text-lightGray;
 }
 
+/* 
+===========================================================================================================================
+
+    Global Styles used for the blog posts page
+___________________________________________________________________________________________________________________________
+*/
+
+.active-page-number {
+  @apply border-2 border-orange-400 text-black
+}
+
 .form-input:focus {
   @apply outline-primaryGreen;
 }
