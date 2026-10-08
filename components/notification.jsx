@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Image from "next/image";
@@ -33,8 +33,19 @@ const notifications = [
   { id: 8, message: "The blog post 'Designers Management' has been unapproved. Please review", time: "09:05PM" },
 ];
 
+const getTodayLabel = () => {
+  const d = new Date();
+  const month = d.toLocaleString("en-GB", { month: "long" });
+  return `Today, ${d.getDate()} ${month}, ${d.getFullYear()}`;
+};
+
 function Notification() {
   const isEmpty = notifications.length === 0;
+  const [todayLabel, setTodayLabel] = useState("");
+
+  useEffect(() => {
+    setTodayLabel(getTodayLabel());
+  }, []);
 
   useEffect(() => {
     document.title = "Notifications";
@@ -42,7 +53,7 @@ function Notification() {
 
   return (
     <div className="flex h-screen">
-      <div className="hidden sm:flex shrink-0">
+      <div className="hidden md:flex shrink-0">
         <Sidebar />
       </div>
 
@@ -71,7 +82,7 @@ function Notification() {
                   </svg>
                 </button>
               </div>
-              {!isEmpty && <p className="mt-4 text-[16px] text-gray-700">Today, 24 May, 2024</p>}
+              {!isEmpty && <p className="mt-4 text-[16px] text-gray-700">{todayLabel}</p>}
             </header>
 
             <div className="flex flex-1 min-h-0 flex-col overflow-y-auto px-6 pb-6 pt-5">
