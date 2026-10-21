@@ -1,5 +1,5 @@
 import React from "react";
-import Notification from "../../components/notification";
+import Notification from "../../components/Notification";
 
 function index() {
   return (

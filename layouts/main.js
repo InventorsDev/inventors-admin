@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 export default function Layout({ children, title, showBackButton = false }) {
   const { user, loading } = useAuth();
