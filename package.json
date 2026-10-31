@@ -18,7 +18,7 @@
     "recharts": "^3.0.2"
   },
   "devDependencies": {
-    "@iconify/react": "^5.2.1",
+    "@iconify/react": "^6.0.3",
     "autoprefixer": "^10.6.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
